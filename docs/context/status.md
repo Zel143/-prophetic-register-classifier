@@ -16,21 +16,42 @@ three v1 transfer corpora is fetched; the hand-labeled seed set (345 verses, inc
 seven angel-of-the-LORD theophanies split narrative/prophetic within-scene, and the Sinai
 theophany split prophetic/law-wisdom within-scene) is built and explored in a notebook; and
 feature extraction (general stylometric + prophetic-specific) is done and run on the seed
-set; and a classifier (logistic regression, chosen over linear SVM by CV) is trained in two
-feature-set variants (full 129 columns, and a narrowed 24-column set) and applied to all
-three transfer corpora. Transfer result is still inconclusive after both variants — see
-below.
+set; and a classifier (logistic regression, chosen over linear SVM by CV) has been
+evaluated three ways: full 129-column feature set, narrowed 24-column feature set, and
+hand-picked pericopes (both feature sets). Best evidence so far for transfer: the specific
+1 Enoch passage Jude 1:14-15 quotes scores 64-82% prophetic across both models. That result
+doesn't generalize cleanly to the rest of either transfer corpus or hold up under feature
+narrowing, so the overall transfer question is still open — see below.
 
 ## In progress
 
 - Nothing actively in flight. Next unstarted step, per `docs/classifier.md`'s updated
-  conclusion: growing the seed set (345 rows is thin for 24+ features) and/or replacing
-  mechanical sentence-chunking of the transfer corpora with hand-picked pericopes, so the
-  transfer evaluation isn't fighting a unit-of-analysis mismatch on top of the modeling
-  questions.
+  conclusion: growing the seed set (345 rows is thin for 24+ features) and hand-picking
+  more transfer pericopes to shrink the small-N sampling noise in that evaluation (12
+  pericopes / 160 chunks currently), then revisiting feature selection with more data to
+  check it against.
 
 ## Done
 
+- Hand-picked transfer pericopes (2026-07-21): `src/transfer_pericopes.py` hand-selects 12
+  coherent passages across the three transfer corpora (the seed-set editorial method,
+  applied to the transfer corpora — e.g. 1 Enoch's opening theophany that Jude 1:14-15
+  quotes, its "Woes for the Sinners" chapter, the Watchers' descent narrative; Sibylline
+  Oracles' "Prophecy of Christ" and "Woe on Babylon"; Bahman Yasht's opening
+  dream-narrative vs. Ahura Mazda's prophetic answer, and its closing resurrection oracle),
+  targeting the chunking-mismatch confound named in the narrowed-feature entry below.
+  First attempt applying the models to whole-pericope features (110-767 words) surfaced a
+  *second* confound before it could mislead anyone: `n_words` (max 59 in the seed set) blew
+  so far past the training range that every single pericope predicted "narrative"
+  regardless of content. Fixed by sentence-chunking within each hand-picked pericope (160
+  chunks), keeping the units length-comparable to training data while still only ever
+  drawn from a deliberately chosen coherent passage. Result (`src/eval_pericopes.py`):
+  under the full feature set, all three corpora scored 43-51% prophetic (up from 27-39% on
+  mechanical chunking), and the Jude-quoted 1 Enoch passage specifically scored 64%
+  (full model) / 82% (narrow model) prophetic — the single cleanest result in the project.
+  But the narrow model doesn't replicate the broader improvement (Sibylline Oracles drops
+  back to 24.3%), repeating the law-wisdom-as-default pattern from the narrowed-feature
+  mechanical-chunking pass. Full numbers and interpretation in `docs/classifier.md`.
 - Narrowed-feature classifier (2026-07-21): re-ran `src/train_classifier.py --features
   narrow` (24 columns: prophetic-specific features + non-lexical general-stylometric
   features, dropping the 92 `fw_*` function-word columns implicated in the earlier

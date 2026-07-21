@@ -25,15 +25,15 @@ tradition's theological claims — it measures textual style.
 
 ## Status
 
-Data, seed set, feature extraction, and a first classifier (in two
-feature-set variants) are all in place — see `docs/context/status.md` for
-the current snapshot and `docs/classifier.md` for the classifier's
-methodology and results. Transfer-test result is still inconclusive after
-narrowing the feature set to rule out an obvious confound: neither variant
-produced a trustworthy "transfers" / "doesn't transfer" answer, and
-narrowing traded one confound (topic-leaking vocabulary) for another
-(sentence-length statistics tracking chunking artifacts rather than genre)
-— see `docs/classifier.md` for the full accounting.
+Data, seed set, feature extraction, and a classifier (evaluated three ways
+— full feature set, narrowed feature set, and hand-picked pericopes) are
+all in place — see `docs/context/status.md` for the current snapshot and
+`docs/classifier.md` for the full methodology and results. Best result so
+far: the specific 1 Enoch passage Jude 1:14-15 quotes scores 64-82%
+prophetic under both models — the strongest evidence yet for transfer —
+but that doesn't hold up consistently across the rest of either transfer
+corpus or across feature sets, so the overall transfer question is still
+open. See `docs/classifier.md` for the full accounting.
 
 ## Project scope (v1)
 

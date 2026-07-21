@@ -5,6 +5,42 @@ alternatives were considered. Newest entries at the top.
 
 ---
 
+## 2026-07-21 — Hand-picked transfer pericopes; caught a second (length) confound before reporting the first pass
+
+**Decision:** `src/transfer_pericopes.py` hand-selects 12 coherent passages from the
+transfer corpora using the same editorial method as `src/build_seed_set.py` (search for a
+distinctive start/end phrase in the raw text, same method already used to fix the Bahman
+Yasht page range). Applying the trained models directly to whole-pericope features (110-767
+words) produced a suspiciously uniform result — literally every pericope predicted
+"narrative," including the ones that read as pure oracle. Checked before reporting it:
+`n_words` maxes out at 59 in the seed set, pericopes start at 109, and `n_words` has a
+strong positive narrative coefficient in both models — the length mismatch alone was
+determining the output. Fixed by sentence-chunking *within* each hand-picked pericope (same
+chunker as `chunk_transfer_corpora.py`), producing 160 chunks that stay length-comparable to
+training data while still only ever being drawn from a deliberately chosen coherent passage.
+
+**Why:** The previous entry's stated next step was replacing mechanical sentence-chunking
+with hand-picked pericopes, to remove the chunking-shape confound narrowing had surfaced.
+Doing that naively (whole-pericope features) would have produced a clean-looking but
+meaningless "100% narrative" result driven entirely by a units-of-measurement mismatch, not
+genre — exactly the kind of confound this project's own practice (see the two prior
+classifier entries) has been to name and check before trusting a result, not just when the
+result happens to look encouraging. Checking it here paid off: the fixed
+(sentence-chunked-within-pericope) version produced the most specific and interesting result
+in the project so far — the 1 Enoch passage Jude 1:14-15 quotes scores 64-82% prophetic
+across both models — but it also confirmed the narrow model's earlier problem doesn't go
+away just because chunking got more careful (Sibylline Oracles still drops to 24.3%
+prophetic under the narrow model).
+
+**Alternatives considered:** Reporting the whole-pericope "100% narrative" result at face
+value (rejected immediately once the length-distribution check made clear what was actually
+happening — would have been actively misleading, not just incomplete). Discarding the
+whole-pericope-level features entirely once the chunk-level fix was in place (rejected —
+kept as `transfer_pericopes_features.csv` for human reading/reference, since the passages
+themselves are worth having on record even though they're not what gets predicted on).
+
+---
+
 ## 2026-07-21 — Narrowed the feature set as planned; kept reporting the transfer result as inconclusive rather than declaring the fix worked
 
 **Decision:** Added `--features {all,narrow}` to `src/train_classifier.py`. The narrow

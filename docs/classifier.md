@@ -11,6 +11,8 @@ extraction used on the seed set). Run in order:
 python src/chunk_transfer_corpora.py
 python src/train_classifier.py --features all      # results/classifier*.joblib etc.
 python src/train_classifier.py --features narrow   # results/classifier_narrow* etc.
+python src/transfer_pericopes.py                    # hand-picked pericopes, see below
+python src/eval_pericopes.py                        # applies both saved models to them
 ```
 
 `--features narrow` drops the 92 `fw_*` function-word columns and keeps
@@ -22,7 +24,10 @@ Outputs (each run writes its own suffixed files, so both are on disk for
 comparison): `results/classifier[_narrow].joblib` (fitted pipeline),
 `results/classifier_eval[_narrow].txt` (CV report + feature importance +
 transfer summary), `results/transfer_predictions[_narrow].csv` (per-chunk
-predictions and class probabilities for all three transfer corpora).
+predictions and class probabilities for all three transfer corpora),
+`results/transfer_pericope_chunks_features.csv` and
+`results/transfer_pericopes_predictions.csv` (hand-picked pericopes,
+sentence-chunked within each — see "Hand-picked pericopes" below for why).
 
 ## Seed-set cross-validation result
 
@@ -113,6 +118,71 @@ vocabulary) and exposed a second one underneath it (sentence-length
 statistics acting as an accidental proxy for "translated verse" rather than
 for law-wisdom specifically).
 
+## Hand-picked pericopes
+
+`src/transfer_pericopes.py` hand-selects 12 coherent passages across the
+three transfer corpora (4-5 per corpus — e.g. 1 Enoch's opening
+theophany that Jude 1:14-15 quotes, its "Woes for the Sinners" chapter
+XCIV, the Watchers' descent narrative; Sibylline Oracles' "Prophecy of
+Christ" section and its "Woe on Babylon" oracle; Bahman Yasht's opening
+dream-narrative split from Ahura Mazda's prophetic answer, and its closing
+resurrection oracle), the same editorial method `src/build_seed_set.py`
+used for the biblical seed set, targeting confound #2 above directly.
+Boundaries were found the same way the Bahman Yasht page range was
+originally fixed (search for a distinctive phrase, not a line-number
+guess) — see the module docstring for the full list and exact anchors.
+`python src/eval_pericopes.py` applies both saved models and writes
+`results/transfer_pericopes_predictions.csv`.
+
+**First attempt found a second length confound before it could mislead
+anyone.** Applying the models directly to whole-pericope-level features
+(110-767 words each) made every single one of the 12 pericopes predict
+"narrative," regardless of content — including the ones that are about as
+oracular as text gets, like the Woes chapter. Checked why: the seed set's
+`n_words` tops out at 59; these pericopes start at 109. `n_words` has a
+strong positive coefficient for narrative in both models (see feature
+tables above), and at that much z-score distance from the training
+distribution it was overwhelming every other feature. Fix: sentence-chunk
+*within* each hand-picked pericope (same chunker as
+`chunk_transfer_corpora.py`), so each evaluation unit is drawn only from a
+deliberately chosen coherent passage (fixing confound #2) but stays
+length-comparable to the training data (not reintroducing a third
+confound). 160 chunks resulted; that's what's actually predicted on.
+
+**Result: the clearest pro-transfer signal so far, but it doesn't survive
+feature-set narrowing.**
+
+| corpus | prophetic share (full model) | prophetic share (narrow model) |
+|---|---|---|
+| 1 Enoch | 0.509 | 0.466 |
+| Bahman Yasht | 0.429 | 0.286 |
+| Sibylline Oracles | 0.489 | 0.243 |
+
+Under the full model, all three corpora land close to or above 43-51%
+prophetic — a real jump from the mechanically-chunked pass (27-39%) and,
+for 1 Enoch and Sibylline Oracles, close to the "should skew heavily
+prophetic" result the source material would predict. The specific pericope
+Jude 1:14-15 quotes (1 Enoch's opening theophany) scores especially
+strongly: 64% prophetic under the full model, 82% under the narrow model —
+the single cleanest result in the whole project, and notably the *one*
+pericope where hand-picking and narrowing agree with each other and with
+the hypothesis. Bahman Yasht's narrative/prophetic split pericopes moved in
+the expected direction too: the dream-narrative half (Zoroaster's report of
+his dream) scored 50/50 under the full model and 100% narrative under the
+narrow model, while the oracle half (Ahura Mazda's first-person answer)
+held steady at 50% prophetic under both.
+
+But the narrow model doesn't replicate the improvement broadly — Bahman
+Yasht and Sibylline Oracles both drop under narrowing (Sibylline Oracles
+from 48.9% to 24.3%), the same law-wisdom-as-default pattern seen in the
+mechanically-chunked narrow-model pass. So: hand-picking pericopes produced
+real, checkable wins (the Jude/1-Enoch anchor pericope, the Bahman Yasht
+narrative/oracle split) alongside the same structural-feature confound
+narrowing already surfaced once. Sample size matters too — 12 pericopes,
+160 chunks, some pericopes contributing as few as 2 chunks (Bahman Yasht's
+short opening episodes) — these percentages have real sampling noise the
+larger mechanical-chunking pass doesn't.
+
 ## Transfer-corpus results (full feature set)
 
 Fraction of chunks per corpus the model predicted for each class:
@@ -160,15 +230,26 @@ framing), rule out three more mundane explanations first:
    three centuries of English and multiple literary traditions — the
    seed-set CV caveat above applies here even more.
 
-Still not fixed. Narrowing the feature set was informative — it confirmed
-confound #1 was real and, in the same pass, surfaced #2 more concretely —
-but the net transfer result is, if anything, less clean than before
-narrowing, not more. The honest summary after two feature-set variants:
-this project has not yet produced a transfer result that's trustworthy
-enough to read as either "prophetic register transfers" or "it doesn't."
-Both readings are still live. Likely next steps, in rough order of
-expected payoff: growing the seed set (345 rows is genuinely thin for 24+
-features); replacing mechanical sentence-chunking of the transfer corpora
-with hand-picked pericopes the way the seed set itself was built, so the
-transfer evaluation isn't fighting a unit-of-analysis mismatch on top of
-everything else; and only then revisiting feature selection.
+Confound #2 (chunking mismatch) has now been directly addressed by the
+hand-picked pericopes above, with a genuinely encouraging result under the
+full feature set. The honest summary after three passes (mechanical
+chunking / full features, mechanical chunking / narrow features,
+hand-picked pericopes / both feature sets): the strongest, most specific
+piece of evidence this project has produced — the Jude-quoted 1 Enoch
+passage scoring 64-82% prophetic under both models, and Bahman Yasht's
+narrative/oracle split moving the expected direction — supports "prophetic
+register transfers, at least somewhat, for hand-curated passages." But that
+result doesn't hold up once the feature set is narrowed to the more
+defensible column set, and doesn't extend cleanly to Sibylline Oracles or
+to the corpora as a whole under mechanical, representative chunking. Both
+"transfers" and "doesn't, or only partially" remain live readings — but the
+pericope-level result narrows *where* the disagreement lives: not "is there
+any prophetic-register signal at all" (there clearly is, at least in
+places), but "is that signal strong and general enough to survive both
+different feature sets and different sampling methods." It currently isn't,
+consistently. Likely next steps, in rough order of expected payoff: growing
+the seed set (345 rows is genuinely thin for 24+ features, and the
+pericope-level evaluation's small N — 160 chunks across 12 pericopes — has
+real sampling noise of its own); hand-picking more transfer pericopes to
+shrink that noise; and only then revisiting feature selection again with
+more data to check it against.
