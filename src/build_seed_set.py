@@ -41,6 +41,7 @@ REFERENCES = {
         ("Malachi", 3, 1, 3, "messenger oracle"),
         ("Daniel", 9, 24, 27, "seventy weeks prophecy"),
         ("Psalms", 22, 1, 18, "messianic psalm"),
+        ("Jude", 1, 14, 15, "Enoch's judgment oracle, explicitly framed as prophecy; near-verbatim quote of 1 Enoch 1:9"),
     ],
     "narrative": [
         ("Genesis", 5, 21, 24, "Enoch: 'walked with God ... and he was not'"),

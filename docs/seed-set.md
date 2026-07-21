@@ -1,6 +1,6 @@
 # Seed set: reference list and rationale
 
-`data/seed_set.csv` (291 verses: 105 prophetic, 113 narrative, 73 law-wisdom)
+`data/seed_set.csv` (293 verses: 107 prophetic, 113 narrative, 73 law-wisdom)
 is built by `src/build_seed_set.py` from the reference list hardcoded in
 that script. This doc explains the selection criteria and flags the
 judgment calls, so the list can be revised without re-deriving the reasoning
@@ -11,8 +11,9 @@ from scratch.
 - **Prophetic** — passages built around a divine-speech formula ("thus
   saith the LORD", "the word of the LORD came unto...") or the classic
   messianic-prophecy set named in the README. Drawn from Isaiah, Jeremiah,
-  Ezekiel, the Minor Prophets, Daniel 9, and Psalm 22 (messianic psalm,
-  included even though Psalms as a book is mixed-genre).
+  Ezekiel, the Minor Prophets, Daniel 9, Psalm 22 (messianic psalm,
+  included even though Psalms as a book is mixed-genre), and Jude 1:14-15
+  (NT, explicitly labeled "prophesied" — see the Enoch section below).
 - **Narrative** — prose narrative with no embedded oracle verse. Passages
   were chosen specifically to *exclude* direct divine speech even when the
   surrounding chapter contains it — e.g. Genesis 12:1-9 stops short of
@@ -43,6 +44,14 @@ narrative content to. It's not something this project's stylometric method
 measures directly, but it's the thread connecting the Genesis label (a
 narrative-class data point) to a transfer-test corpus that's almost pure
 prophetic register.
+
+See `docs/enoch-deep-dive.md` for the full canonical record (Genesis, Luke,
+Hebrews, Jude) and, specifically, why Jude 1:14-15 — now also in the seed
+set, prophetic class — is a near-verbatim quotation of 1 Enoch 1:9. That
+pairing is a controlled anchor point between the biblical seed set and the
+1 Enoch transfer corpus: unlike every other prophetic/narrative split in
+this seed set, that one's "ground truth" isn't this project's editorial
+call, it's the canon's own (Jude explicitly calls it "prophesied").
 
 ## Known gaps / things to revisit
 

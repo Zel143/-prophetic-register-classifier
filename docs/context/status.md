@@ -23,12 +23,18 @@ built.
 ## Done
 
 - Seed set (2026-07-21): `src/build_seed_set.py` pulls a hand-curated reference list of
-  verse ranges out of `data/Bible-kjv/` into `data/seed_set.csv` (291 verses: 105
+  verse ranges out of `data/Bible-kjv/` into `data/seed_set.csv` (293 verses: 107
   prophetic, 113 narrative, 73 law-wisdom). Reference list and selection rationale — what
   counts as "oracle-bearing" vs. clean narrative, why certain passages were excluded — is
-  in `docs/seed-set.md`. Includes Genesis 5:21-24 (Enoch) in the narrative class; that doc
-  also notes the thematic link between the four-verse canonical Enoch and the 1 Enoch
-  transfer corpus.
+  in `docs/seed-set.md`. Includes Genesis 5:21-24 (Enoch) in the narrative class and Jude
+  1:14-15 in the prophetic class.
+- Enoch deep dive (2026-07-21): `docs/enoch-deep-dive.md` collects every canonical mention
+  of Enoch (Genesis 4 vs. 5 — two different people; Luke 3; Hebrews 11; Jude 1) and traces
+  the textual link this project turned up: Jude 1:14-15 is a near-verbatim quotation of
+  1 Enoch 1:9, and Jude explicitly calls it "prophesied." That's a same-register anchor
+  point pairing a seed-set verse with the 1 Enoch transfer corpus where the prophetic
+  label isn't this project's editorial call — it's the canon's own. Both verses are now in
+  `data/seed_set.csv`.
 - Data pipeline (2026-07-20): `src/setup_data.py` clones `aruljohn/Bible-kjv` into
   `data/Bible-kjv/` (gitignored, same convention as `kjv-stylometry-repo`) and scrapes the
   three ready transfer corpora from sacred-texts.com into `data/transfer/*.txt` (vendored,

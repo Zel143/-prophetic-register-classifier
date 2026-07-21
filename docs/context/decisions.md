@@ -5,6 +5,29 @@ alternatives were considered. Newest entries at the top.
 
 ---
 
+## 2026-07-21 — Added Jude 1:14-15 to the prophetic seed class after finding it quotes 1 Enoch 1:9
+
+**Decision:** Added `Jude 1:14-15` to the prophetic class in `src/build_seed_set.py`'s
+reference list, and wrote up the full canonical Enoch record in
+`docs/enoch-deep-dive.md`.
+
+**Why:** While researching every canonical mention of Enoch (Genesis 5, Luke 3, Hebrews
+11, Jude 1) for `docs/seed-set.md`'s Enoch note, found that Jude 1:14-15 is a near-verbatim
+quotation of 1 Enoch 1:9 (`data/transfer/1_enoch.txt` lines 56-74) — and Jude explicitly
+calls it "prophesied." That makes it a controlled anchor point: a seed-set verse and a
+transfer-corpus verse that are (near-)identical text, where the prophetic-register label
+isn't this project's own editorial judgment call like every other seed-set entry, but the
+canon's. Worth having in the seed set specifically so later feature/classifier analysis can
+check whether the trained model's score on this pair lines up with the ancient judgment
+that they're the same genre.
+
+**Alternatives considered:** Leaving it out as NT material when the rest of the prophetic
+class is OT (Isaiah/Jeremiah/Ezekiel/Minor Prophets/Daniel/Psalms) — rejected; the
+1-Enoch-quotation link is too directly relevant to the project's transfer-test design to
+skip over for genre-of-book consistency alone.
+
+---
+
 ## 2026-07-21 — Seed set built as a hardcoded reference list, not a programmatic genre pass over full books
 
 **Decision:** `src/build_seed_set.py` pulls verse ranges from an explicit, hand-picked
