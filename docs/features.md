@@ -1,7 +1,7 @@
 # Feature extraction
 
 `src/extract_features.py` reads `data/seed_set.csv` and writes
-`results/seed_set_features.csv` (321 rows x 136 columns: seed-set columns +
+`results/seed_set_features.csv` (345 rows x 136 columns: seed-set columns +
 features). Requires the spaCy English model:
 `python -m spacy download en_core_web_sm`. Run: `python src/extract_features.py`.
 
@@ -48,12 +48,15 @@ detects.
 
 | feature | law-wisdom | narrative | prophetic |
 |---|---|---|---|
-| divine_speech_formula | 0.00 | 0.00 | 0.13 |
-| vocative_density | 0.00 | 0.00 | 0.47 |
-| second_person_density | 54.75 | 21.90 | 33.61 |
-| future_modal_density | 21.83 | 6.61 | 25.67 |
-| imperative_density | 82.19 | 17.70 | 56.07 |
-| ttr | 0.86 | 0.78 | 0.79 |
+| divine_speech_formula | 0.00 | 0.00 | 0.12 |
+| vocative_density | 0.00 | 0.00 | 0.39 |
+| second_person_density | 68.42 | 20.54 | 37.47 |
+| future_modal_density | 18.53 | 6.15 | 25.83 |
+| imperative_density | 90.91 | 15.38 | 47.24 |
+| ttr | 0.86 | 0.77 | 0.79 |
+
+(Updated after adding the Sinai passages — see below. The Decalogue pushed
+law-wisdom's `second_person_density` up further, from 54.75 to 68.42.)
 
 Two things worth flagging before feature selection / modeling:
 
@@ -87,6 +90,23 @@ episodes, the "speaks" verses score higher on `second_person_density` and
 fires `divine_speech_formula` — the only non-prophetic-book verse in the
 seed set to do so — confirming that feature is catching the literal
 formula wherever it occurs, not just tracking which book a verse is from.
+
+## Sinai: source of the prophetic/law-wisdom overlap
+
+`docs/study-notes/sinai.md` documents the Sinai theophany (Exodus 19-20)
+split at the seam between the divine self-declaration opening the Decalogue
+(Exodus 20:1-2, prophetic class) and the commandments themselves (20:3-17,
+law-wisdom class). The commandments turned out to have the single highest
+`second_person_density` of any passage in the seed set (several individual
+commandments score 200-250 per 1000 words, vs. a 37.47 prophetic-class
+average) — direct confirmation that the prophetic/law-wisdom overlap noted
+above isn't a modeling artifact, it traces back to a real shared origin:
+both registers descend from the same unmediated-theophany event. Also added
+Micah 1:3-4, a later prophetic passage reusing Sinai's storm-theophany
+imagery (third-person "the LORD cometh forth," not direct address) — a
+reminder that "prophetic register" covers at least two different shapes
+(direct oracle-address vs. third-person theophany-description) that this
+seed set's features don't yet distinguish.
 
 ## Next up
 

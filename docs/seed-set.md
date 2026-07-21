@@ -1,6 +1,6 @@
 # Seed set: reference list and rationale
 
-`data/seed_set.csv` (321 verses: 123 prophetic, 125 narrative, 73 law-wisdom)
+`data/seed_set.csv` (345 verses: 127 prophetic, 130 narrative, 88 law-wisdom)
 is built by `src/build_seed_set.py` from the reference list hardcoded in
 that script. This doc explains the selection criteria and flags the
 judgment calls, so the list can be revised without re-deriving the reasoning
@@ -70,6 +70,21 @@ pairing is a controlled anchor point between the biblical seed set and the
 this seed set, that one's "ground truth" isn't this project's editorial
 call, it's the canon's own (Jude explicitly calls it "prophesied").
 
+## Sinai (Exodus 19-20) — the prophetic/law-wisdom boundary
+
+The Sinai theophany is the un-mediated counterpart to the angel-of-the-LORD
+scenes above (no angelic intermediary), and it's split differently: not
+narrative/prophetic, but prophetic/law-wisdom — the divine self-declaration
+opening the Decalogue ("I am the LORD thy God...", Exodus 20:1-2) is
+prophetic class, the commandments themselves (20:3-17) are law-wisdom.
+That split is the seed set's clearest illustration of where the
+prophetic/law-wisdom feature overlap noted in `docs/features.md` actually
+comes from — see `docs/study-notes/sinai.md` for the full rationale and
+what the extracted features show (the commandments turned out to have the
+single highest second-person density of any passage in the seed set).
+Also added: Micah 1:3-4, a later prophetic passage that reuses Sinai's
+storm-theophany imagery as judgment poetry.
+
 ## Known gaps / things to revisit
 
 - No verses yet from Chronicles' genealogies, Numbers, or Deuteronomy law
@@ -80,5 +95,5 @@ call, it's the canon's own (Jude explicitly calls it "prophesied").
   chosen, but worth watching in feature analysis — this is exactly the kind
   of "prophetic register embedded in narrative frame" case the README flags
   as needing verse-level granularity.
-- Class sizes aren't balanced (123 / 125 / 73) — fine for a seed set, but
+- Class sizes aren't balanced (127 / 130 / 88) — fine for a seed set, but
   worth stratifying or weighting once the classifier is trained.

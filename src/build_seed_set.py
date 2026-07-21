@@ -53,6 +53,13 @@ REFERENCES = {
         ("Judges", 6, 16, 16, "angel of the LORD to Gideon: 'Surely I will be with thee'"),
         ("Judges", 6, 23, 23, "angel of the LORD to Gideon: 'Peace be unto thee; fear not'"),
         ("Judges", 13, 3, 5, "angel of the LORD's birth-oracle to Manoah's wife (Samson)"),
+        # Sinai: the un-mediated counterpart to the angel-of-the-LORD scenes
+        # above (no angelic intermediary), and the source of the
+        # prophetic/law-wisdom boundary case flagged in docs/features.md --
+        # split at the seam between the divine self-declaration and the
+        # commandments proper. See docs/study-notes/sinai.md.
+        ("Exodus", 20, 1, 2, "Sinai: divine self-declaration opening the Decalogue, 'I am the LORD thy God'"),
+        ("Micah", 1, 3, 4, "Sinai-theophany imagery reused as judgment oracle: 'the LORD cometh forth... mountains molten'"),
     ],
     "narrative": [
         ("Genesis", 5, 21, 24, "Enoch: 'walked with God ... and he was not'"),
@@ -65,6 +72,7 @@ REFERENCES = {
         ("Exodus", 3, 2, 3, "angel of the LORD appears in the burning bush (narrative frame)"),
         ("Judges", 6, 11, 13, "angel of the LORD sits under the oak; Gideon's skeptical reply"),
         ("Judges", 13, 19, 21, "angel of the LORD ascends in the altar flame (narrative, no speech)"),
+        ("Exodus", 19, 16, 20, "Sinai theophany: thunder, cloud, trumpet, quaking mountain (narrative frame, no direct speech to the people yet)"),
         ("Ruth", 1, 1, 18, "Ruth and Naomi"),
         ("Ruth", 4, 9, 17, "Boaz redeems Ruth"),
         ("Esther", 2, 15, 18, "Esther made queen"),
@@ -74,6 +82,7 @@ REFERENCES = {
         ("2 Chronicles", 34, 1, 13, "Josiah's reforms (narrated account)"),
     ],
     "law-wisdom": [
+        ("Exodus", 20, 3, 17, "the Ten Commandments proper, split from the Sinai divine-speech opening above"),
         ("Leviticus", 11, 1, 8, "dietary law"),
         ("Leviticus", 19, 9, 18, "holiness code"),
         ("Leviticus", 23, 1, 8, "feast law"),

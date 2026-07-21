@@ -33,6 +33,13 @@ than letting one borrow the other's authority.
   theophanies in the seed set (Hagar, the Akedah, the burning bush, Gideon,
   Samson's birth), plus background on why the angel of the LORD sometimes
   speaks and is addressed with unqualified divine authority.
+- [`sinai.md`](sinai.md) — the Sinai theophany (Exodus 19-20), the
+  unmediated counterpart to the angel-of-the-LORD scenes, split at the seam
+  between prophetic (the divine self-declaration) and law-wisdom (the
+  commandments themselves) — the seed set's clearest example of where the
+  prophetic/law-wisdom overlap flagged in `docs/features.md` comes from.
+  Plus background on how Sinai gets retold and reinterpreted across the
+  canon (Deuteronomy, Hebrews, Judges 5).
 
 Both files started as answers to specific questions asked mid-project (what
 does the rest of the canon say about Enoch; what about the angel-of-the-LORD

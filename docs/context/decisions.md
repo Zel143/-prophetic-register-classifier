@@ -5,6 +5,39 @@ alternatives were considered. Newest entries at the top.
 
 ---
 
+## 2026-07-21 — Added Sinai theophany, split prophetic/law-wisdom within-scene (not narrative/prophetic)
+
+**Decision:** Added Exodus 19:16-20 (narrative), Exodus 20:1-2 (prophetic), Exodus 20:3-17
+(law-wisdom), and Micah 1:3-4 (prophetic) to `src/build_seed_set.py`'s reference list. Wrote
+up the episode in `docs/study-notes/sinai.md`.
+
+**Why:** The angel-of-the-LORD scenes added earlier the same day all split narrative from
+prophetic. Sinai is a different, arguably more useful case: it's the seed set's only
+unmediated theophany (no angel — "God spake all these words" directly), and its content
+splits cleanly across the *other* boundary this project's own feature-extraction findings
+flagged as blurry — prophetic vs. law-wisdom, since both use commanding-voice address. That
+made Sinai worth deliberately hunting for as a targeted test, not just another
+narrative/prophetic pair. Result confirmed the hypothesis: re-ran feature extraction and the
+Decalogue's commandments (20:3-17) turned out to have the single highest
+`second_person_density` of any passage in the whole seed set (up to 250 per 1000 words on
+"Thou shalt not..." verses) — direct evidence that the earlier-noted prophetic/law-wisdom
+overlap traces back to a real shared origin, not a modeling artifact. Micah 1:3-4 was added
+alongside as a second data point: prophetic material that reuses Sinai's storm-theophany
+imagery in the third person ("the LORD cometh forth") rather than direct second-person
+address, which is a different shape of "prophetic register" than most of the seed set's
+other entries and worth remembering once feature weighting starts.
+
+**Alternatives considered:** Treating the Decalogue as a single prophetic-class block since
+it's introduced by divine speech (rejected — the content shift at 20:3 from
+self-declaration to commandment is exactly the kind of verse-level genre seam the README's
+labeling unit exists to catch; lumping it as one block would have hidden the finding rather
+than revealing it). Adding more of the Sinai-echo passages found in research (Habakkuk 3,
+Judges 5:4-5, Psalm 68:7-8) directly to the seed set (deferred — kept as background in
+`docs/study-notes/sinai.md` instead, to avoid scope creep on a single case study; can be
+added later if the prophetic class needs more third-person-theophany examples).
+
+---
+
 ## 2026-07-21 — Added angel-of-the-LORD theophanies, split narrative/prophetic within-scene; reversed the Genesis 22 exclusion
 
 **Decision:** Added seven angel-of-the-LORD scenes to `src/build_seed_set.py`'s reference

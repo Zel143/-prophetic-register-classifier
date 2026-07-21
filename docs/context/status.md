@@ -12,10 +12,11 @@ reflect a detectable linguistic style (verb mood, address form, formulaic marker
 than just content, and does that style transfer to non-biblical prophetic/oracular
 literature (Sibylline Oracles, 1 Enoch, Zoroastrian eschatology)? Repo scope, label scheme,
 and data-sourcing plan are written up; source data for both the biblical corpus and all
-three v1 transfer corpora is fetched; the hand-labeled seed set (321 verses, including
-seven angel-of-the-LORD theophanies split narrative/prophetic within-scene) is built and
-explored in a notebook; and feature extraction (general stylometric + prophetic-specific)
-is done and run on the seed set. The classifier itself is not yet built.
+three v1 transfer corpora is fetched; the hand-labeled seed set (345 verses, including
+seven angel-of-the-LORD theophanies split narrative/prophetic within-scene, and the Sinai
+theophany split prophetic/law-wisdom within-scene) is built and explored in a notebook; and
+feature extraction (general stylometric + prophetic-specific) is done and run on the seed
+set. The classifier itself is not yet built.
 
 ## In progress
 
@@ -24,6 +25,16 @@ is done and run on the seed set. The classifier itself is not yet built.
 
 ## Done
 
+- Sinai seed-set additions (2026-07-21): added the Sinai theophany (Exodus 19-20) to
+  `data/seed_set.csv`, split not narrative/prophetic like the angel-of-the-LORD scenes but
+  prophetic/law-wisdom — Exodus 20:1-2 (divine self-declaration) is prophetic, 20:3-17 (the
+  commandments) is law-wisdom, Exodus 19:16-20 (thunder/cloud/trumpet scene-setting) is
+  narrative. Also added Micah 1:3-4 (prophetic, reuses Sinai storm-theophany imagery as
+  judgment poetry). This is the seed set's clearest illustration of where the
+  prophetic/law-wisdom feature overlap (see feature-extraction entry below) comes from: the
+  Decalogue's commandments turned out to have the single highest second-person density of
+  any passage in the set. Full writeup in `docs/study-notes/sinai.md`. Seed set is now 345
+  verses (127 prophetic, 130 narrative, 88 law-wisdom).
 - Angel-of-the-LORD seed-set additions (2026-07-21): added seven theophany scenes
   (Genesis 16 & 22, Exodus 3, Judges 6 & 13) to `data/seed_set.csv`, each split at the
   seam between the angel's narrative appearance (narrative class) and the angel's
