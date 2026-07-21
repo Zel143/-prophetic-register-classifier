@@ -1,3 +1,4 @@
+Feature set: all (129 columns)
 Model: logistic_regression
 
 logistic_regression: macro-F1 0.686 (+/- 0.051)

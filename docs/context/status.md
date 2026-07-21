@@ -16,19 +16,37 @@ three v1 transfer corpora is fetched; the hand-labeled seed set (345 verses, inc
 seven angel-of-the-LORD theophanies split narrative/prophetic within-scene, and the Sinai
 theophany split prophetic/law-wisdom within-scene) is built and explored in a notebook; and
 feature extraction (general stylometric + prophetic-specific) is done and run on the seed
-set; and a first classifier (logistic regression, chosen over linear SVM by CV) is trained
-and applied to all three transfer corpora. Transfer result is inconclusive so far — see
+set; and a classifier (logistic regression, chosen over linear SVM by CV) is trained in two
+feature-set variants (full 129 columns, and a narrowed 24-column set) and applied to all
+three transfer corpora. Transfer result is still inconclusive after both variants — see
 below.
 
 ## In progress
 
-- Nothing actively in flight. Next unstarted step is untangling the classifier's transfer
-  result (see `docs/classifier.md`'s three candidate explanations) — likely by narrowing
-  the feature set to fewer, more deliberately register-specific columns, or growing the
-  seed set.
+- Nothing actively in flight. Next unstarted step, per `docs/classifier.md`'s updated
+  conclusion: growing the seed set (345 rows is thin for 24+ features) and/or replacing
+  mechanical sentence-chunking of the transfer corpora with hand-picked pericopes, so the
+  transfer evaluation isn't fighting a unit-of-analysis mismatch on top of the modeling
+  questions.
 
 ## Done
 
+- Narrowed-feature classifier (2026-07-21): re-ran `src/train_classifier.py --features
+  narrow` (24 columns: prophetic-specific features + non-lexical general-stylometric
+  features, dropping the 92 `fw_*` function-word columns implicated in the earlier
+  `fw_her`/`fw_she` overfitting finding). Seed-set CV accuracy barely moved (macro-F1
+  0.686 → 0.691) but feature importance got much more defensible —
+  `divine_speech_formula` became the single strongest prophetic-class feature. However the
+  transfer result got *harder* to read, not easier: prophetic share dropped in all three
+  corpora, and Sibylline Oracles got labeled law-wisdom over half the time (0.527) — traced
+  to its translated-hexameter sentence length/word-length coincidentally matching the seed
+  set's law-wisdom passages structurally, not genre. Net effect: narrowing fixed one
+  confound (topic-leaking vocabulary) and exposed a second one underneath it
+  (sentence-length statistics acting as a chunking-shape proxy rather than a genre marker).
+  Neither the full nor the narrowed feature set has produced a transfer result trustworthy
+  enough to call "transfers" or "doesn't transfer" — both readings are still live. Full
+  writeup, including the specific numbers for both variants side by side, in
+  `docs/classifier.md`.
 - Classifier (2026-07-21): `src/chunk_transfer_corpora.py` sentence-chunks the three
   transfer corpora and extracts the same feature set as the seed set (4274 chunks total).
   `src/train_classifier.py` trains logistic regression vs. linear SVM (5-fold CV, macro-F1

@@ -5,6 +5,39 @@ alternatives were considered. Newest entries at the top.
 
 ---
 
+## 2026-07-21 — Narrowed the feature set as planned; kept reporting the transfer result as inconclusive rather than declaring the fix worked
+
+**Decision:** Added `--features {all,narrow}` to `src/train_classifier.py`. The narrow
+mode drops the 92 `fw_*` function-word columns and keeps 24: the five prophetic-specific
+features plus non-lexical general-stylometric ones (sentence/word length, TTR, POS
+proportions). Ran both variants, kept both sets of outputs on disk (suffixed filenames),
+and updated `docs/classifier.md` to report the narrowed run's result as *also*
+inconclusive — prophetic share actually dropped in all three transfer corpora under the
+narrowed model, and Sibylline Oracles got labeled law-wisdom over half the time.
+
+**Why:** This was the next step flagged in the prior entry's alternatives-considered
+section. It partly worked: seed-set feature importance is now much more defensible
+(`divine_speech_formula` is the top prophetic predictor, instead of `fw_her`/`fw_she`), and
+CV accuracy didn't drop (0.686 → 0.691), meaning most of the full model's apparent skill
+wasn't actually coming from the function-word table. But it didn't clean up the transfer
+result — checked why Sibylline Oracles shifted toward law-wisdom and found its
+translated-hexameter sentence length (18.1 words, 4.36 letters/word average) coincidentally
+matches the seed set's law-wisdom passages (17.8 words, 4.24 letters/word) structurally,
+which is a *different* confound (chunking-shape leaking into prediction) than the one just
+fixed. Reporting this as "narrowing didn't work" rather than quietly re-running with more
+feature tweaks until the numbers looked better was the point — same principle as the prior
+entry.
+
+**Alternatives considered:** Continuing to iterate on the feature set within this session
+until transfer numbers looked cleaner (rejected — that's exactly the kind of
+result-shopping the project's own scope-boundary principle warns against; better to name
+the newly-found confound and stop at a real stopping point). Discarding the full-feature
+results now that narrow exists (rejected — kept both, suffixed, since the comparison
+between them is itself the useful artifact: it's what proved confound #1 was real without
+being sufficient on its own).
+
+---
+
 ## 2026-07-21 — Classifier: reported an inconclusive transfer result honestly rather than reframing it
 
 **Decision:** `src/train_classifier.py` trains logistic regression (selected over linear

@@ -13,9 +13,19 @@ Two stages:
      of chunks the model calls prophetic -- the actual transfer-test result
      this project exists to produce.
 
+--features all (default) uses the full 129-column feature set. --features
+narrow drops the 92 fw_* function-word columns and keeps only the
+prophetic-specific features plus non-lexical general-stylometric features
+(sentence/word length, TTR, POS proportions) -- see docs/classifier.md for
+why: the full feature set's top coefficients turned out to be dominated by
+fw_her/fw_she, which track "is this passage about a woman" (Ruth, Hagar)
+rather than narrative register generally. Outputs are suffixed by mode
+(_narrow) so both runs' results stay on disk for comparison.
+
 Usage:
-    python src/train_classifier.py
+    python src/train_classifier.py [--features all|narrow]
 """
+import argparse
 import os
 
 import joblib
@@ -32,19 +42,33 @@ REPO_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 RESULTS_DIR = os.path.join(REPO_ROOT, "results")
 SEED_FEATURES_PATH = os.path.join(RESULTS_DIR, "seed_set_features.csv")
 TRANSFER_FEATURES_PATH = os.path.join(RESULTS_DIR, "transfer_features.csv")
-MODEL_PATH = os.path.join(RESULTS_DIR, "classifier.joblib")
-EVAL_PATH = os.path.join(RESULTS_DIR, "classifier_eval.txt")
-TRANSFER_PRED_PATH = os.path.join(RESULTS_DIR, "transfer_predictions.csv")
 
 SEED_META_COLS = ["book", "chapter", "verse", "ref", "label", "note", "text"]
 TRANSFER_META_COLS = ["corpus", "chunk_id", "text"]
 
 CLASSES = ["prophetic", "narrative", "law-wisdom"]
 
+# Prophetic-specific + non-lexical general-stylometric columns (see module
+# docstring). Everything else (fw_* function-word frequencies) is dropped
+# in --features narrow.
+NARROW_FEATURE_PREFIXES = ("pos_",)
+NARROW_FEATURE_COLS = [
+    "avg_sent_len", "std_sent_len", "avg_word_len", "ttr", "n_words",
+    "divine_speech_formula", "second_person_density", "vocative_density",
+    "future_modal_density", "imperative_density",
+]
 
-def load_seed_data():
+
+def load_seed_data(mode):
     df = pd.read_csv(SEED_FEATURES_PATH)
-    feature_cols = [c for c in df.columns if c not in SEED_META_COLS]
+    all_feature_cols = [c for c in df.columns if c not in SEED_META_COLS]
+    if mode == "narrow":
+        feature_cols = [
+            c for c in all_feature_cols
+            if c in NARROW_FEATURE_COLS or c.startswith(NARROW_FEATURE_PREFIXES)
+        ]
+    else:
+        feature_cols = all_feature_cols
     X = df[feature_cols].values
     y = df["label"].values
     return df, X, y, feature_cols
@@ -65,12 +89,12 @@ def evaluate_models(X, y):
     return results
 
 
-def fit_final_model(X, y, feature_cols, best_name):
+def fit_final_model(X, y, feature_cols, best_name, model_path):
     clf = LogisticRegression(max_iter=2000) if best_name == "logistic_regression" else LinearSVC(max_iter=5000)
     pipe = Pipeline([("scale", StandardScaler()), ("clf", clf)])
     pipe.fit(X, y)
-    joblib.dump({"pipeline": pipe, "feature_cols": feature_cols, "classes": list(pipe.classes_)}, MODEL_PATH)
-    print(f"saved final model ({best_name}) to {MODEL_PATH}")
+    joblib.dump({"pipeline": pipe, "feature_cols": feature_cols, "classes": list(pipe.classes_)}, model_path)
+    print(f"saved final model ({best_name}) to {model_path}")
     return pipe
 
 
@@ -97,7 +121,7 @@ def top_features(pipe, feature_cols, n=8):
     return "\n".join(lines)
 
 
-def apply_to_transfer(pipe, feature_cols):
+def apply_to_transfer(pipe, feature_cols, pred_path):
     df = pd.read_csv(TRANSFER_FEATURES_PATH)
     X = df[feature_cols].values
     preds = pipe.predict(X)
@@ -109,16 +133,25 @@ def apply_to_transfer(pipe, feature_cols):
         for i, cls in enumerate(pipe.classes_):
             df_out[f"prob_{cls}"] = probs[:, i]
 
-    df_out.to_csv(TRANSFER_PRED_PATH, index=False)
-    print(f"wrote {len(df_out)} transfer predictions to {TRANSFER_PRED_PATH}")
+    df_out.to_csv(pred_path, index=False)
+    print(f"wrote {len(df_out)} transfer predictions to {pred_path}")
 
     summary = df_out.groupby("corpus")["predicted_label"].value_counts(normalize=True).unstack().round(3)
     return summary
 
 
 def main():
-    df, X, y, feature_cols = load_seed_data()
-    print(f"seed set: {len(df)} rows, {len(feature_cols)} features, classes: {pd.Series(y).value_counts().to_dict()}")
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--features", choices=["all", "narrow"], default="all")
+    args = parser.parse_args()
+    suffix = "" if args.features == "all" else "_narrow"
+    model_path = os.path.join(RESULTS_DIR, f"classifier{suffix}.joblib")
+    eval_path = os.path.join(RESULTS_DIR, f"classifier_eval{suffix}.txt")
+    pred_path = os.path.join(RESULTS_DIR, f"transfer_predictions{suffix}.csv")
+
+    df, X, y, feature_cols = load_seed_data(args.features)
+    print(f"feature set: {args.features} ({len(feature_cols)} columns)")
+    print(f"seed set: {len(df)} rows, classes: {pd.Series(y).value_counts().to_dict()}")
 
     cv_results = evaluate_models(X, y)
     best_name = max(cv_results, key=lambda k: cv_results[k].mean())
@@ -130,17 +163,13 @@ def main():
     print("Confusion matrix:")
     print(cm_df)
 
-    pipe = fit_final_model(X, y, feature_cols, best_name)
+    pipe = fit_final_model(X, y, feature_cols, best_name, model_path)
 
-    importance = ""
-    if best_name == "logistic_regression":
-        importance = top_features(pipe, feature_cols)
-        print(importance)
-    else:
-        importance = top_features(pipe, feature_cols)
-        print(importance)
+    importance = top_features(pipe, feature_cols)
+    print(importance)
 
-    with open(EVAL_PATH, "w", encoding="utf-8") as f:
+    with open(eval_path, "w", encoding="utf-8") as f:
+        f.write(f"Feature set: {args.features} ({len(feature_cols)} columns)\n")
         f.write(f"Model: {best_name}\n\n")
         for name, scores in cv_results.items():
             f.write(f"{name}: macro-F1 {scores.mean():.3f} (+/- {scores.std():.3f})\n")
@@ -150,12 +179,12 @@ def main():
         f.write(cm_df.to_string())
         f.write("\n\nFeature importance (final model, fit on all seed data):\n")
         f.write(importance)
-    print(f"\nwrote eval summary to {EVAL_PATH}")
+    print(f"\nwrote eval summary to {eval_path}")
 
     print("\n--- Transfer-corpus predictions ---")
-    summary = apply_to_transfer(pipe, feature_cols)
+    summary = apply_to_transfer(pipe, feature_cols, pred_path)
     print(summary)
-    with open(EVAL_PATH, "a", encoding="utf-8") as f:
+    with open(eval_path, "a", encoding="utf-8") as f:
         f.write("\n\nTransfer-corpus predicted-label proportions:\n")
         f.write(summary.to_string())
 
