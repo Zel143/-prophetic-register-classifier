@@ -25,8 +25,13 @@ tradition's theological claims — it measures textual style.
 
 ## Status
 
-Scoping stage. Repo structure and data-sourcing plan are in place; feature
-extraction and classifier code are not yet written.
+Data, seed set, feature extraction, and a first classifier are all in
+place — see `docs/context/status.md` for the current snapshot and
+`docs/classifier.md` for the classifier's methodology and results. First
+transfer-test result is inconclusive (none of the three transfer corpora
+came back majority-prophetic), with real open questions about whether
+that's a genuine finding or a confound in the current feature set — see
+`docs/classifier.md` for the honest accounting.
 
 ## Project scope (v1)
 

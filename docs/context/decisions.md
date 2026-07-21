@@ -5,6 +5,40 @@ alternatives were considered. Newest entries at the top.
 
 ---
 
+## 2026-07-21 — Classifier: reported an inconclusive transfer result honestly rather than reframing it
+
+**Decision:** `src/train_classifier.py` trains logistic regression (selected over linear
+SVM by 5-fold CV macro-F1) on the full 129-column feature set and applies it as-is to the
+transfer corpora, rather than narrowing to a smaller register-specific feature subset
+before reporting results. The transfer result — none of the three transfer corpora came
+back majority-prophetic, contrary to how heavily oracular their source material is
+described as being in `docs/data-sources.md` — is written up in `docs/classifier.md` as
+inconclusive, with three named candidate explanations (translator-era vocabulary vs. genre,
+seed-vs-transfer chunking mismatch, small/high-dimensional training set), rather than
+picked apart until it produces a cleaner-looking number.
+
+**Why:** The README frames both outcomes as informative ("If it transfers... If it
+doesn't... that's informative too") specifically to avoid pressure toward one answer. The
+model's own feature importances handed over more direct evidence than expected for one of
+the three candidate confounds: top coefficients for narrative include `fw_her`/`fw_she`,
+which checking against the seed set showed are concentrated almost entirely in Ruth and the
+Hagar passages — i.e. "is this passage about a woman," not "is this narrative register."
+With 345 seed rows and 129 features that's a real overfitting risk, not a hypothetical, and
+reporting the transfer numbers without that caveat attached would have been misleading
+regardless of which way the numbers came out.
+
+**Alternatives considered:** Narrowing to a smaller, more deliberately register-specific
+feature subset (just `divine_speech_formula`, `second_person_density`, `future_modal_density`,
+etc.) before running the transfer evaluation, to get a cleaner signal (deferred, not
+rejected — flagged as the most likely next step in `docs/classifier.md`, but doing it now
+would have meant retroactively picking the feature set to fit a hoped-for transfer result
+rather than reporting what the originally-planned full feature set actually produced first).
+Suppressing or downplaying the `fw_her`/`fw_she` finding since it complicates the narrative
+(rejected outright — it's exactly the kind of caveat the project's own scope-boundary
+principle, see `docs/study-notes/README.md`, exists to keep visible).
+
+---
+
 ## 2026-07-21 — Added Sinai theophany, split prophetic/law-wisdom within-scene (not narrative/prophetic)
 
 **Decision:** Added Exodus 19:16-20 (narrative), Exodus 20:1-2 (prophetic), Exodus 20:3-17

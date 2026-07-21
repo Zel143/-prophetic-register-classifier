@@ -1,0 +1,60 @@
+Model: logistic_regression
+
+logistic_regression: macro-F1 0.686 (+/- 0.051)
+linear_svm: macro-F1 0.660 (+/- 0.056)
+
+Cross-validated classification report:
+              precision    recall  f1-score   support
+
+   prophetic       0.61      0.60      0.61       127
+   narrative       0.69      0.75      0.72       130
+  law-wisdom       0.78      0.70      0.74        88
+
+    accuracy                           0.68       345
+   macro avg       0.70      0.69      0.69       345
+weighted avg       0.69      0.68      0.68       345
+
+Confusion matrix:
+                 pred_prophetic  pred_narrative  pred_law-wisdom
+true_prophetic               76              38               13
+true_narrative               28              98                4
+true_law-wisdom              20               6               62
+
+Feature importance (final model, fit on all seed data):
+
+Top features for 'law-wisdom':
+  pos_adj                        +1.170
+  n_words                        -0.911
+  avg_word_len                   +0.828
+  fw_neither                     +0.766
+  avg_sent_len                   -0.683
+  pos_sconj                      -0.679
+  fw_i                           -0.668
+  imperative_density             +0.652
+
+Top features for 'narrative':
+  n_words                        +1.619
+  fw_neither                     -0.997
+  avg_word_len                   -0.966
+  fw_shall                       -0.918
+  fw_if                          +0.822
+  imperative_density             -0.798
+  pos_adj                        -0.767
+  fw_as                          -0.751
+
+Top features for 'prophetic':
+  fw_her                         -0.938
+  fw_she                         -0.924
+  fw_so                          -0.767
+  n_words                        -0.708
+  fw_art                         +0.692
+  divine_speech_formula          +0.663
+  fw_i                           +0.656
+  fw_if                          -0.608
+
+Transfer-corpus predicted-label proportions:
+predicted_label    law-wisdom  narrative  prophetic
+corpus                                             
+1_enoch                 0.187      0.423      0.390
+bahman_yasht            0.264      0.464      0.272
+sibylline_oracles       0.401      0.241      0.358

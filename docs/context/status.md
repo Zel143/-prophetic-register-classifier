@@ -16,15 +16,36 @@ three v1 transfer corpora is fetched; the hand-labeled seed set (345 verses, inc
 seven angel-of-the-LORD theophanies split narrative/prophetic within-scene, and the Sinai
 theophany split prophetic/law-wisdom within-scene) is built and explored in a notebook; and
 feature extraction (general stylometric + prophetic-specific) is done and run on the seed
-set. The classifier itself is not yet built.
+set; and a first classifier (logistic regression, chosen over linear SVM by CV) is trained
+and applied to all three transfer corpora. Transfer result is inconclusive so far — see
+below.
 
 ## In progress
 
-- Nothing actively in flight. Next unstarted step is the classifier (logistic
-  regression / SVM per README).
+- Nothing actively in flight. Next unstarted step is untangling the classifier's transfer
+  result (see `docs/classifier.md`'s three candidate explanations) — likely by narrowing
+  the feature set to fewer, more deliberately register-specific columns, or growing the
+  seed set.
 
 ## Done
 
+- Classifier (2026-07-21): `src/chunk_transfer_corpora.py` sentence-chunks the three
+  transfer corpora and extracts the same feature set as the seed set (4274 chunks total).
+  `src/train_classifier.py` trains logistic regression vs. linear SVM (5-fold CV, macro-F1
+  0.686 vs. 0.660 — logistic regression selected), evaluates on the seed set (68% CV
+  accuracy; prophetic is the hardest class, confused mostly with narrative), and applies
+  the fitted model to the transfer corpora. **None of the three transfer corpora came back
+  majority-prophetic** (1 Enoch 39.0% prophetic, Bahman Yasht 27.2%, Sibylline Oracles
+  35.8%) despite all three being sourced as heavily/near-purely oracular content — a
+  real, so-far-unresolved result, not yet a clean "prophetic register does/doesn't
+  transfer" answer. Also found a concrete overfitting risk in the trained model's own
+  feature-importance ranking: top coefficients include `fw_her`/`fw_she`, which turn out to
+  almost entirely track which narrative passages happen to be about women (Ruth, Hagar) —
+  vocabulary tied to which books were picked, not narrative register generally. Full
+  methodology, results, and the three candidate explanations for the weak transfer result
+  (translator-era vocabulary vs. genre, chunking-method mismatch between curated seed
+  verses and mechanically-chunked transfer prose, small/high-dimensional training set) are
+  in `docs/classifier.md`.
 - Sinai seed-set additions (2026-07-21): added the Sinai theophany (Exodus 19-20) to
   `data/seed_set.csv`, split not narrative/prophetic like the angel-of-the-LORD scenes but
   prophetic/law-wisdom — Exodus 20:1-2 (divine self-declaration) is prophetic, 20:3-17 (the
