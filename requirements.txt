@@ -5,3 +5,4 @@ matplotlib>=3.8
 jupyter>=1.0
 requests>=2.31
 beautifulsoup4>=4.12
+spacy>=3.8

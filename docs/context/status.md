@@ -12,15 +12,32 @@ reflect a detectable linguistic style (verb mood, address form, formulaic marker
 than just content, and does that style transfer to non-biblical prophetic/oracular
 literature (Sibylline Oracles, 1 Enoch, Zoroastrian eschatology)? Repo scope, label scheme,
 and data-sourcing plan are written up; source data for both the biblical corpus and all
-three v1 transfer corpora is fetched, and the hand-labeled seed set (291 verses across the
-three label classes) is built. Feature extraction and the classifier itself are not yet
-built.
+three v1 transfer corpora is fetched; the hand-labeled seed set (293 verses) is built and
+explored in a notebook; and feature extraction (general stylometric + prophetic-specific)
+is done and run on the seed set. The classifier itself is not yet built.
 
 ## In progress
 
-- Nothing actively in flight. Next unstarted step is feature extraction.
+- Nothing actively in flight. Next unstarted step is the classifier (logistic
+  regression / SVM per README).
 
 ## Done
+
+- Feature extraction (2026-07-21): `src/extract_features.py` writes
+  `results/seed_set_features.csv` (136 columns: function-word frequencies, sentence/word
+  stats, TTR, POS-tag proportions, plus prophetic-specific divine-speech-formula,
+  second-person, vocative, future-modal, and imperative density). Function-word list and
+  general-stylometric feature shape borrowed from `../kjv-stylometry-repo` for
+  cross-project comparability. Full writeup, caveats (spaCy mis-tags archaic KJV forms;
+  `Mood=Imp` never fires so imperative density uses a bare-infinitive-first-word heuristic
+  instead), and class-mean findings (divine-speech-formula/vocative are prophetic-exclusive
+  but near-tautological; second-person/imperative density don't cleanly separate prophetic
+  from law-wisdom, since legal commands use as much direct address as oracle does) are in
+  `docs/features.md`.
+- Seed set exploration notebook (2026-07-21): `notebooks/01_seed_set_exploration.ipynb`,
+  executed. Label balance, verse-length distribution by class, sample verses, and a
+  word-overlap/Jaccard check on the Jude 1:14-15 / 1 Enoch 1:9 pair (0.46 similarity,
+  confirming the near-verbatim quotation from `docs/enoch-deep-dive.md`).
 
 - Seed set (2026-07-21): `src/build_seed_set.py` pulls a hand-curated reference list of
   verse ranges out of `data/Bible-kjv/` into `data/seed_set.csv` (293 verses: 107

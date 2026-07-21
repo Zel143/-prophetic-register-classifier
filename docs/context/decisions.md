@@ -5,6 +5,34 @@ alternatives were considered. Newest entries at the top.
 
 ---
 
+## 2026-07-21 — Feature extraction: regex features over spaCy where the tagger disagrees with itself
+
+**Decision:** `src/extract_features.py`'s prophetic-specific features (divine-speech
+formula, second-person density, vocative density, future-modal density) are all
+regex-based, not POS/dependency-based, even though a POS tagger (spaCy `en_core_web_sm`)
+is used elsewhere in the same script for the general-stylometric POS-distribution
+features. `imperative_density` uses a POS-based heuristic (bare-infinitive-form verb as
+the first token of a sentence) instead of checking for `Mood=Imp` directly.
+
+**Why:** Tested spaCy directly on KJV text ("Hear, O heavens, and give ear, O earth.") and
+found `en_core_web_sm` never emits `Mood=Imp` for English at all — imperative and bare
+infinitive share a surface form and the model doesn't disambiguate them, so a
+`Mood=Imp`-based feature would be silently zero for every row (confirmed: it was, before
+the heuristic replaced it). Separately, the tagger visibly mis-tags archaic KJV
+constructions even on non-imperative text (e.g. "saith" as `ADP`), which pushed the
+prophetic-specific features toward regex where a clean literal pattern was available
+("thus saith the LORD", thou/thee/thy/ye/you, "O <Name>", shall/will) rather than trusting
+the tagger's judgment calls.
+
+**Alternatives considered:** A better-suited tagger/model for Early Modern English
+(rejected for now — added complexity not justified before the classifier itself exists;
+worth revisiting if POS features turn out to matter once the classifier is trained).
+Dropping `imperative_density` entirely rather than using a heuristic (rejected — the
+heuristic produces a feature that behaves sensibly against the seed set's three classes,
+see `docs/features.md`, so it's more useful kept-and-flagged-as-approximate than dropped).
+
+---
+
 ## 2026-07-21 — Added Jude 1:14-15 to the prophetic seed class after finding it quotes 1 Enoch 1:9
 
 **Decision:** Added `Jude 1:14-15` to the prophetic class in `src/build_seed_set.py`'s
