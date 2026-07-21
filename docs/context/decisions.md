@@ -5,6 +5,36 @@ alternatives were considered. Newest entries at the top.
 
 ---
 
+## 2026-07-21 — Added angel-of-the-LORD theophanies, split narrative/prophetic within-scene; reversed the Genesis 22 exclusion
+
+**Decision:** Added seven angel-of-the-LORD scenes to `src/build_seed_set.py`'s reference
+list (Genesis 16 & 22, Exodus 3, Judges 6 & 13), each split into a narrative-class range
+(the angel appearing/acting) and a prophetic-class range (the angel's first-person divine
+speech) from the same passage. This reverses part of the 2026-07-20 Genesis-22 call:
+`docs/seed-set.md` originally excluded Genesis 22 (the Akedah) entirely, reasoning the
+divine-oath verses were "hard to excise cleanly from the narrative frame" — but verses
+16-18 ("By myself have I sworn, saith the LORD...") turned out to excise cleanly once
+specifically targeted for this purpose.
+
+**Why:** These theophany scenes are a natural, textually-motivated test of the README's
+core labeling-unit rule (verse-level granularity because narrative chapters can contain
+embedded oracles) — same scene, same characters, only the speech-act changes between
+narrative and prophetic halves. Ran feature extraction on the split and it validated the
+approach: in every multi-verse episode, the "speaks" half scores higher on
+`second_person_density` and `future_modal_density` than the "appears/acts" half of the same
+scene, and Genesis 22:16 fires `divine_speech_formula` — the only non-prophetic-book verse
+in the set to do so. Full detail in `docs/angel-of-the-lord.md`.
+
+**Alternatives considered:** Leaving Genesis 22 excluded per the original call (rejected —
+the new evidence directly contradicts the original reasoning for verses 16-18 specifically,
+even though verses 12-14 are correctly still excluded). Including all 52 angel-of-the-LORD
+verses found across the OT (rejected — seven episodes were enough to make the
+narrative/prophetic-split point without ballooning the seed set; the other 45 largely
+repeat the same pattern, e.g. Numbers 22's Balaam's-ass episode, and can be added later if
+the seed set needs more prophetic volume).
+
+---
+
 ## 2026-07-21 — Feature extraction: regex features over spaCy where the tagger disagrees with itself
 
 **Decision:** `src/extract_features.py`'s prophetic-specific features (divine-speech

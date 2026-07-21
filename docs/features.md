@@ -1,7 +1,7 @@
 # Feature extraction
 
 `src/extract_features.py` reads `data/seed_set.csv` and writes
-`results/seed_set_features.csv` (293 rows x 136 columns: seed-set columns +
+`results/seed_set_features.csv` (321 rows x 136 columns: seed-set columns +
 features). Requires the spaCy English model:
 `python -m spacy download en_core_web_sm`. Run: `python src/extract_features.py`.
 
@@ -72,6 +72,21 @@ Two things worth flagging before feature selection / modeling:
   second-person/imperative address, which those two classes actually
   share stylistically (both are commanding-voice registers — one legal,
   one oracular).
+
+## Angel-of-the-LORD theophanies: a within-scene validation
+
+`docs/angel-of-the-lord.md` documents seven scenes (Genesis 16 & 22,
+Exodus 3, Judges 6 & 13) split verse-by-verse into a narrative half (angel
+appears/acts) and a prophetic half (angel speaks as God in first person).
+This is as close to a controlled test as the seed set has: same scene,
+same characters, same book — only the speech-act changes. Result, straight
+from `results/seed_set_features.csv`: in every one of the five multi-verse
+episodes, the "speaks" verses score higher on `second_person_density` and
+`future_modal_density` than the "appears/acts" verses from the same scene
+(several narrative-half verses score exactly 0 on both). Genesis 22:16 also
+fires `divine_speech_formula` — the only non-prophetic-book verse in the
+seed set to do so — confirming that feature is catching the literal
+formula wherever it occurs, not just tracking which book a verse is from.
 
 ## Next up
 

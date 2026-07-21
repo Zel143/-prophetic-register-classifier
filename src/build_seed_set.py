@@ -42,12 +42,29 @@ REFERENCES = {
         ("Daniel", 9, 24, 27, "seventy weeks prophecy"),
         ("Psalms", 22, 1, 18, "messianic psalm"),
         ("Jude", 1, 14, 15, "Enoch's judgment oracle, explicitly framed as prophecy; near-verbatim quote of 1 Enoch 1:9"),
+        # Angel-of-the-LORD theophanies: in each case the angel's own speech
+        # (first-person divine voice) is split out from the surrounding
+        # narrative frame below, per the README's "oracle-bearing verses
+        # excluded even within narrative books" rule.
+        ("Genesis", 16, 9, 12, "angel of the LORD's birth-oracle to Hagar (Ishmael)"),
+        ("Genesis", 22, 16, 18, "angel of the LORD: 'saith the LORD' covenant/blessing oracle to Abraham"),
+        ("Exodus", 3, 4, 6, "burning bush: divine self-revelation to Moses"),
+        ("Judges", 6, 14, 14, "angel of the LORD commissions Gideon: 'Go in this thy might'"),
+        ("Judges", 6, 16, 16, "angel of the LORD to Gideon: 'Surely I will be with thee'"),
+        ("Judges", 6, 23, 23, "angel of the LORD to Gideon: 'Peace be unto thee; fear not'"),
+        ("Judges", 13, 3, 5, "angel of the LORD's birth-oracle to Manoah's wife (Samson)"),
     ],
     "narrative": [
         ("Genesis", 5, 21, 24, "Enoch: 'walked with God ... and he was not'"),
         ("Genesis", 12, 1, 9, "Abram's call and journey (narrated, not the oracle verses)"),
         ("Genesis", 24, 15, 27, "Isaac and Rebekah at the well"),
         ("Genesis", 37, 23, 28, "Joseph sold into slavery"),
+        ("Genesis", 16, 7, 8, "angel of the LORD finds Hagar (narrative frame, no oracle yet)"),
+        ("Genesis", 16, 13, 13, "Hagar names God (narrative resolution)"),
+        ("Genesis", 22, 11, 11, "angel of the LORD calls 'Abraham, Abraham' (bare address, no oracle content)"),
+        ("Exodus", 3, 2, 3, "angel of the LORD appears in the burning bush (narrative frame)"),
+        ("Judges", 6, 11, 13, "angel of the LORD sits under the oak; Gideon's skeptical reply"),
+        ("Judges", 13, 19, 21, "angel of the LORD ascends in the altar flame (narrative, no speech)"),
         ("Ruth", 1, 1, 18, "Ruth and Naomi"),
         ("Ruth", 4, 9, 17, "Boaz redeems Ruth"),
         ("Esther", 2, 15, 18, "Esther made queen"),

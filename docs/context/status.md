@@ -12,7 +12,8 @@ reflect a detectable linguistic style (verb mood, address form, formulaic marker
 than just content, and does that style transfer to non-biblical prophetic/oracular
 literature (Sibylline Oracles, 1 Enoch, Zoroastrian eschatology)? Repo scope, label scheme,
 and data-sourcing plan are written up; source data for both the biblical corpus and all
-three v1 transfer corpora is fetched; the hand-labeled seed set (293 verses) is built and
+three v1 transfer corpora is fetched; the hand-labeled seed set (321 verses, including
+seven angel-of-the-LORD theophanies split narrative/prophetic within-scene) is built and
 explored in a notebook; and feature extraction (general stylometric + prophetic-specific)
 is done and run on the seed set. The classifier itself is not yet built.
 
@@ -23,6 +24,17 @@ is done and run on the seed set. The classifier itself is not yet built.
 
 ## Done
 
+- Angel-of-the-LORD seed-set additions (2026-07-21): added seven theophany scenes
+  (Genesis 16 & 22, Exodus 3, Judges 6 & 13) to `data/seed_set.csv`, each split at the
+  seam between the angel's narrative appearance (narrative class) and the angel's
+  first-person divine speech (prophetic class) — a direct, within-scene test of the
+  README's "oracle-bearing verses excluded even within narrative books" rule. Rationale,
+  per-episode table, and feature-extraction validation (the "speaks" half consistently
+  scores higher on second-person/future-modal density than the "appears" half of the same
+  scene) are in `docs/angel-of-the-lord.md`. Also corrected an earlier call: Genesis 22
+  ("saith the LORD" verses 16-18) was originally excluded as too hard to excise cleanly —
+  turned out not to be true once specifically re-examined. Seed set is now 321 verses (123
+  prophetic, 125 narrative, 73 law-wisdom).
 - Feature extraction (2026-07-21): `src/extract_features.py` writes
   `results/seed_set_features.csv` (136 columns: function-word frequencies, sentence/word
   stats, TTR, POS-tag proportions, plus prophetic-specific divine-speech-formula,
