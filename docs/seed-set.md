@@ -15,7 +15,7 @@ from scratch.
   included even though Psalms as a book is mixed-genre), Jude 1:14-15
   (NT, explicitly labeled "prophesied" — see the Enoch section below), and
   seven angel-of-the-LORD theophany passages (see
-  `docs/angel-of-the-lord.md`) — the speech half of scenes where the angel
+  `docs/study-notes/angel-of-the-lord.md`) — the speech half of scenes where the angel
   talks in God's first person.
 - **Narrative** — prose narrative with no embedded oracle verse. Passages
   were chosen specifically to *exclude* direct divine speech even when the
@@ -24,7 +24,7 @@ from scratch.
   around it. Genesis 22 (Isaac's binding) was originally left out entirely
   for this reason too, but revisited once angel-of-the-LORD passages were
   being hunted specifically: verses 16-18 ("saith the LORD...") turned out
-  to excise cleanly after all — see `docs/angel-of-the-lord.md` and the
+  to excise cleanly after all — see `docs/study-notes/angel-of-the-lord.md` and the
   2026-07-21 decisions.md entry. Verses 12-14 (command, ram, place-naming)
   are still genuinely narrative/instructional and remain excluded.
 - **Law/wisdom** — Leviticus (legal code) and Proverbs (wisdom sayings), per
@@ -40,7 +40,7 @@ verses go to narrative, first-person-divine-speech verses go to prophetic.
 Full rationale, the per-episode table, and what the extracted features show
 for these pairs (the "speaks" half consistently scores higher on
 second-person and future-modal density than the "appears/acts" half from
-the same scene) are in `docs/angel-of-the-lord.md`.
+the same scene) are in `docs/study-notes/angel-of-the-lord.md`.
 
 ## Genesis 5:21-24 — Enoch
 
@@ -62,7 +62,7 @@ measures directly, but it's the thread connecting the Genesis label (a
 narrative-class data point) to a transfer-test corpus that's almost pure
 prophetic register.
 
-See `docs/enoch-deep-dive.md` for the full canonical record (Genesis, Luke,
+See `docs/study-notes/enoch.md` for the full canonical record (Genesis, Luke,
 Hebrews, Jude) and, specifically, why Jude 1:14-15 — now also in the seed
 set, prophetic class — is a near-verbatim quotation of 1 Enoch 1:9. That
 pairing is a controlled anchor point between the biblical seed set and the

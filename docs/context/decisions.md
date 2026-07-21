@@ -23,7 +23,7 @@ narrative and prophetic halves. Ran feature extraction on the split and it valid
 approach: in every multi-verse episode, the "speaks" half scores higher on
 `second_person_density` and `future_modal_density` than the "appears/acts" half of the same
 scene, and Genesis 22:16 fires `divine_speech_formula` — the only non-prophetic-book verse
-in the set to do so. Full detail in `docs/angel-of-the-lord.md`.
+in the set to do so. Full detail in `docs/study-notes/angel-of-the-lord.md`.
 
 **Alternatives considered:** Leaving Genesis 22 excluded per the original call (rejected —
 the new evidence directly contradicts the original reasoning for verses 16-18 specifically,
@@ -67,7 +67,7 @@ see `docs/features.md`, so it's more useful kept-and-flagged-as-approximate than
 
 **Decision:** Added `Jude 1:14-15` to the prophetic class in `src/build_seed_set.py`'s
 reference list, and wrote up the full canonical Enoch record in
-`docs/enoch-deep-dive.md`.
+`docs/study-notes/enoch.md`.
 
 **Why:** While researching every canonical mention of Enoch (Genesis 5, Luke 3, Hebrews
 11, Jude 1) for `docs/seed-set.md`'s Enoch note, found that Jude 1:14-15 is a near-verbatim

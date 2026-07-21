@@ -75,7 +75,7 @@ Two things worth flagging before feature selection / modeling:
 
 ## Angel-of-the-LORD theophanies: a within-scene validation
 
-`docs/angel-of-the-lord.md` documents seven scenes (Genesis 16 & 22,
+`docs/study-notes/angel-of-the-lord.md` documents seven scenes (Genesis 16 & 22,
 Exodus 3, Judges 6 & 13) split verse-by-verse into a narrative half (angel
 appears/acts) and a prophetic half (angel speaks as God in first person).
 This is as close to a controlled test as the seed set has: same scene,

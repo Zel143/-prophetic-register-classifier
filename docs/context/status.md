@@ -31,7 +31,7 @@ is done and run on the seed set. The classifier itself is not yet built.
   README's "oracle-bearing verses excluded even within narrative books" rule. Rationale,
   per-episode table, and feature-extraction validation (the "speaks" half consistently
   scores higher on second-person/future-modal density than the "appears" half of the same
-  scene) are in `docs/angel-of-the-lord.md`. Also corrected an earlier call: Genesis 22
+  scene) are in `docs/study-notes/angel-of-the-lord.md`. Also corrected an earlier call: Genesis 22
   ("saith the LORD" verses 16-18) was originally excluded as too hard to excise cleanly —
   turned out not to be true once specifically re-examined. Seed set is now 321 verses (123
   prophetic, 125 narrative, 73 law-wisdom).
@@ -49,7 +49,7 @@ is done and run on the seed set. The classifier itself is not yet built.
 - Seed set exploration notebook (2026-07-21): `notebooks/01_seed_set_exploration.ipynb`,
   executed. Label balance, verse-length distribution by class, sample verses, and a
   word-overlap/Jaccard check on the Jude 1:14-15 / 1 Enoch 1:9 pair (0.46 similarity,
-  confirming the near-verbatim quotation from `docs/enoch-deep-dive.md`).
+  confirming the near-verbatim quotation from `docs/study-notes/enoch.md`).
 
 - Seed set (2026-07-21): `src/build_seed_set.py` pulls a hand-curated reference list of
   verse ranges out of `data/Bible-kjv/` into `data/seed_set.csv` (293 verses: 107
@@ -57,7 +57,7 @@ is done and run on the seed set. The classifier itself is not yet built.
   counts as "oracle-bearing" vs. clean narrative, why certain passages were excluded — is
   in `docs/seed-set.md`. Includes Genesis 5:21-24 (Enoch) in the narrative class and Jude
   1:14-15 in the prophetic class.
-- Enoch deep dive (2026-07-21): `docs/enoch-deep-dive.md` collects every canonical mention
+- Enoch deep dive (2026-07-21): `docs/study-notes/enoch.md` collects every canonical mention
   of Enoch (Genesis 4 vs. 5 — two different people; Luke 3; Hebrews 11; Jude 1) and traces
   the textual link this project turned up: Jude 1:14-15 is a near-verbatim quotation of
   1 Enoch 1:9, and Jude explicitly calls it "prophesied." That's a same-register anchor
