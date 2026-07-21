@@ -3,7 +3,7 @@
 Snapshot of where the project stands. Update this as work progresses — it should always
 reflect the current state, not a history (see `decisions.md` for the log of past decisions).
 
-_Last updated: 2026-07-20_
+_Last updated: 2026-07-21_
 
 ## Summary
 
@@ -12,16 +12,23 @@ reflect a detectable linguistic style (verb mood, address form, formulaic marker
 than just content, and does that style transfer to non-biblical prophetic/oracular
 literature (Sibylline Oracles, 1 Enoch, Zoroastrian eschatology)? Repo scope, label scheme,
 and data-sourcing plan are written up; source data for both the biblical corpus and all
-three v1 transfer corpora is now fetched. Feature extraction, labeling, and the classifier
-itself are not yet built.
+three v1 transfer corpora is fetched, and the hand-labeled seed set (291 verses across the
+three label classes) is built. Feature extraction and the classifier itself are not yet
+built.
 
 ## In progress
 
-- Nothing actively in flight. Data acquisition for v1 is complete; next unstarted step is
-  the hand-labeled seed set.
+- Nothing actively in flight. Next unstarted step is feature extraction.
 
 ## Done
 
+- Seed set (2026-07-21): `src/build_seed_set.py` pulls a hand-curated reference list of
+  verse ranges out of `data/Bible-kjv/` into `data/seed_set.csv` (291 verses: 105
+  prophetic, 113 narrative, 73 law-wisdom). Reference list and selection rationale — what
+  counts as "oracle-bearing" vs. clean narrative, why certain passages were excluded — is
+  in `docs/seed-set.md`. Includes Genesis 5:21-24 (Enoch) in the narrative class; that doc
+  also notes the thematic link between the four-verse canonical Enoch and the 1 Enoch
+  transfer corpus.
 - Data pipeline (2026-07-20): `src/setup_data.py` clones `aruljohn/Bible-kjv` into
   `data/Bible-kjv/` (gitignored, same convention as `kjv-stylometry-repo`) and scrapes the
   three ready transfer corpora from sacred-texts.com into `data/transfer/*.txt` (vendored,

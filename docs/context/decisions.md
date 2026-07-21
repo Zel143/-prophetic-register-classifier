@@ -5,6 +5,27 @@ alternatives were considered. Newest entries at the top.
 
 ---
 
+## 2026-07-21 — Seed set built as a hardcoded reference list, not a programmatic genre pass over full books
+
+**Decision:** `src/build_seed_set.py` pulls verse ranges from an explicit, hand-picked
+`REFERENCES` list (book/chapter/verse-range/label) rather than labeling entire chapters or
+books wholesale. 291 verses total (105 prophetic, 113 narrative, 73 law-wisdom). Full
+rationale per passage is in `docs/seed-set.md`.
+
+**Why:** The README's labeling unit is verse/pericope level specifically because genre
+shifts within chapters — a narrative chapter can contain an embedded oracle. A programmatic
+whole-book pass (e.g. "everything in Isaiah is prophetic") would mislabel narrative framing
+verses inside prophetic books and oracle verses inside narrative books. Hand-picking ranges
+per passage was the only way to honor that.
+
+**Alternatives considered:** Labeling at chapter granularity (rejected — same
+content-conflation problem the README already called out). Crowdsourcing or reusing an
+existing genre outline (rejected earlier, in `docs/data-sources.md` — no existing
+genre-tagged dataset was found, and the README explicitly avoids copyrighted genre
+outlines).
+
+---
+
 ## 2026-07-20 — Bahman Yasht page range: 4 pages (Observations + Ch. I–III), not the initially assumed 12
 
 **Decision:** Scraped `sbe0556.htm`–`sbe0559.htm` from sacred-texts.com's SBE vol. 5 as the
