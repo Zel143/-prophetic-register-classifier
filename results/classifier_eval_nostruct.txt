@@ -56,6 +56,6 @@ Top features for 'prophetic':
 Transfer-corpus predicted-label proportions:
 predicted_label    law-wisdom  narrative  prophetic
 corpus                                             
-1_enoch                 0.214      0.577      0.208
+1_enoch                 0.214      0.577      0.209
 bahman_yasht            0.369      0.557      0.074
 sibylline_oracles       0.354      0.364      0.282

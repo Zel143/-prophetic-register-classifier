@@ -5,6 +5,36 @@ alternatives were considered. Newest entries at the top.
 
 ---
 
+## 2026-07-22 — Excluded 1 Enoch 1:9 from all analysis, at the project owner's direction
+
+**Decision:** 1 Enoch 1:9 — the verse Jude 1:14-15 quotes — is excluded from every
+evaluation pass. `src/chunk_transfer_corpora.py` strips the verse from the raw text before
+mechanical chunking (asserting exactly one match removed); `src/transfer_pericopes.py`'s
+`ch1_theophany` pericope now ends at the verse-9 boundary (vv. 1-8). Jude 1:14-15 remains
+in the seed set: it is scripture, and its prophetic label rests on its own canonical
+authority, not on the 1 Enoch parallel. All four models re-applied; docs updated
+(`classifier.md` new section, `enoch.md` note, README status).
+
+**Why:** Direct instruction from the project owner ("i forbid u to use that 1 enoch 1:9"),
+consistent with their previously-recorded position that non-canonical books are not
+sources of truth. Complying turned out to strengthen the methodology rather than cost it
+anything: the mechanical-chunking numbers moved ≤0.001, and the vv. 1-8 pericope scores
+*higher* without the quoted verse (70/90/80/90% prophetic across the four feature sets,
+vs. 64/82/73/82 with it) — which also retires a real validity concern, since a verse
+near-identical to seed-set text (Jude 1:14-15) could have inflated the pericope's score
+through lexical overlap rather than register. The project's strongest transfer evidence
+now provably does not depend on the quoted verse.
+
+**Alternatives considered:** Removing Jude 1:14-15 from the seed set as well (rejected —
+not requested, and it is canonical scripture whose label stands on its own; the owner
+affirmed it as genuine prophecy). Dropping the whole `ch1_theophany` pericope or the
+1 Enoch corpus (rejected — the direction was specific to 1:9, and the corpus is
+non-canonical comparison data by design, per the framing entry below). Keeping v. 9 in
+the mechanical pass while cutting it only from the pericope (rejected — "all analysis"
+is the only reading that honors the instruction).
+
+---
+
 ## 2026-07-22 — Grew the seed set 345 → 510 with targeted variety, not just volume
 
 **Decision:** Extended `src/build_seed_set.py`'s reference list by 165 verses

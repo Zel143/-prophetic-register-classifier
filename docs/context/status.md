@@ -22,11 +22,14 @@ replacing raw ttr), each under both mechanical chunking and hand-picked transfer
 Current headline results (510-row models): seed-set CV held steady with 48% more data
 (macro-F1 0.62-0.69 depending on feature set — the original accuracy wasn't small-N
 memorization); the fw_her/fw_she artifact is gone from the full model's top coefficients;
-the Jude 1:14-15-quoted 1 Enoch theophany pericope *strengthened* to 64-82% prophetic
-across all four feature sets; Sibylline Oracles under normttr is now plurality-prophetic
-(0.373) under mechanical chunking — a first; Bahman Yasht trends the other way (2-22%
-prophetic, worse each pass) and increasingly reads as a genuine "doesn't transfer" case.
-See `docs/classifier.md`'s "Grown seed set" section for the full current numbers.
+1 Enoch's opening theophany pericope (ch. 1 vv. 1-8) scores 70-90% prophetic across all
+four feature sets — the project's most robust transfer evidence; Sibylline Oracles under
+normttr is now plurality-prophetic (0.373) under mechanical chunking — a first; Bahman
+Yasht trends the other way (7-22% prophetic, worse each pass) and increasingly reads as a
+genuine "doesn't transfer" case. Note: 1 Enoch 1:9 (the verse Jude 1:14-15 quotes) is
+excluded from all analysis per the project owner's direction — the theophany result above
+does not depend on it (excluding it *raised* the score). See `docs/classifier.md`'s
+"Grown seed set" and "1 Enoch 1:9 excluded" sections for the full current numbers.
 
 ## In progress
 
@@ -41,6 +44,16 @@ See `docs/classifier.md`'s "Grown seed set" section for the full current numbers
 
 ## Done
 
+- 1 Enoch 1:9 exclusion (2026-07-22): per the project owner's direction, 1 Enoch 1:9 (the
+  verse Jude 1:14-15 quotes) is excluded from all analysis — stripped from mechanical
+  chunking in `src/chunk_transfer_corpora.py` (with a one-match assertion) and cut from the
+  `ch1_theophany` pericope boundary in `src/transfer_pericopes.py` (now vv. 1-8). Jude
+  1:14-15 stays in the seed set on its own canonical authority. Re-ran everything: transfer
+  numbers moved ≤0.001 under mechanical chunking, and the vv. 1-8 pericope scores *higher*
+  without the quoted verse (70/90/80/90% prophetic across full/narrow/nostruct/normttr vs.
+  64/82/73/82 before) — the transfer finding never depended on 1 Enoch 1:9, and its removal
+  also eliminates any concern the score was inflated by near-identical text to a seed-set
+  verse. Entry in `decisions.md`; note added to `docs/study-notes/enoch.md`.
 - Seed-set growth pass (2026-07-22): grew `src/build_seed_set.py`'s reference list from 345
   to 510 verses (184/180/146), targeting `docs/seed-set.md`'s own known-gaps list — new
   prophetic *variety* (woe oracles incl. Isaiah 5:8-15 chosen to match 1 Enoch 94's

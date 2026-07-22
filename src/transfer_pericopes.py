@@ -58,8 +58,11 @@ FOOTNOTE_DIGIT_RE = re.compile(r"(?<=\s)\d+(?=\s)")
 
 # (corpus, pericope_id, start_phrase, end_phrase, note)
 PERICOPES = [
-    ("1_enoch", "ch1_theophany", "CHAPTER I.", "CHAPTER II.",
-     "Enoch's opening blessing/judgment theophany -- the passage Jude 1:14-15 quotes"),
+    # Per the project owner's direction (2026-07-22), 1 Enoch 1:9 -- the
+    # verse Jude 1:14-15 quotes -- is excluded from all analysis. The
+    # pericope ends at the "9. And behold!" boundary, covering vv. 1-8 only.
+    ("1_enoch", "ch1_theophany", "CHAPTER I.", "9. And behold!",
+     "Enoch's opening blessing/judgment theophany, vv. 1-8 (v. 9 excluded per project owner's direction)"),
     ("1_enoch", "ch6-7_watchers", "CHAPTER VI.", "CHAPTER VIII",
      "the Watchers descend and take wives -- narrative"),
     ("1_enoch", "ch10_judgment", "CHAPTER X.", "CHAPTER XI.",

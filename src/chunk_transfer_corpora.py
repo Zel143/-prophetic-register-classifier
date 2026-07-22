@@ -30,6 +30,12 @@ CORPORA = ["sibylline_oracles", "1_enoch", "bahman_yasht"]
 MIN_WORDS = 5
 MAX_WORDS = 60
 
+# Per the project owner's direction (2026-07-22), 1 Enoch 1:9 -- the verse
+# Jude 1:14-15 quotes -- is excluded from all analysis. This strips the
+# whole verse (including Charles's bracket-marked variants) from the raw
+# text before chunking.
+ENOCH_1_9_RE = re.compile(r"9\. And behold!.*?against Him\.", re.DOTALL)
+
 
 def chunk_sentences(text):
     sents = [s.strip() for s in re.split(r"[.?!;]+", text) if s.strip()]
@@ -50,6 +56,9 @@ def build():
         path = os.path.join(TRANSFER_DIR, f"{corpus}.txt")
         with open(path, encoding="utf-8") as f:
             text = f.read()
+        if corpus == "1_enoch":
+            text, n_removed = ENOCH_1_9_RE.subn("", text)
+            assert n_removed == 1, f"expected exactly one 1 Enoch 1:9 match, got {n_removed}"
         chunks = chunk_sentences(text)
         print(f"[{corpus}] {len(chunks)} chunks")
         for i, chunk in enumerate(chunks):

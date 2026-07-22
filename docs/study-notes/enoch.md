@@ -54,6 +54,17 @@ reconstructed from). Jude's word for it is *prophesied* (Greek
 "prophecy" gets attached to Enoch, and it's attached to a text that isn't
 in the canon.
 
+### 1 Enoch 1:9 is excluded from the project's analysis
+
+Per the project owner's direction (2026-07-22), 1 Enoch 1:9 is excluded
+from every evaluation pass — stripped from the mechanically-chunked corpus
+and from the `ch1_theophany` pericope (which now covers vv. 1-8 only).
+The quotation comparison below is retained as documentation of the textual
+relationship, not as analysis input. Notably, excluding it *raised* the
+remaining pericope's prophetic score (70-90% across all four feature
+sets), confirming the transfer finding never rested on this verse — see
+`docs/classifier.md`.
+
 ### What the quotation does and doesn't establish
 
 Worth being precise here, because it's easy to overread. Jude quoting

@@ -31,15 +31,19 @@ canonize 1 Enoch.)
 
 ## Status
 
-Data, seed set, feature extraction, and a classifier (evaluated three ways
-— full feature set, narrowed feature set, and hand-picked pericopes) are
-all in place — see `docs/context/status.md` for the current snapshot and
-`docs/classifier.md` for the full methodology and results. Best result so
-far: the specific 1 Enoch passage Jude 1:14-15 quotes scores 64-82%
-prophetic under both models — the strongest evidence yet for transfer —
-but that doesn't hold up consistently across the rest of either transfer
-corpus or across feature sets, so the overall transfer question is still
-open. See `docs/classifier.md` for the full accounting.
+Data, seed set (510 hand-labeled verses), feature extraction, and a
+classifier evaluated across four feature sets and two sampling methods
+(mechanical chunking and hand-picked pericopes) are all in place — see
+`docs/context/status.md` for the current snapshot and `docs/classifier.md`
+for the full methodology and results. Best result so far: 1 Enoch's
+opening theophany (ch. 1 vv. 1-8) scores 70-90% prophetic across all four
+feature sets — the project's most robust transfer evidence. (1 Enoch 1:9,
+the verse Jude 1:14-15 quotes, is excluded from all analysis at the
+project owner's direction; the result above doesn't depend on it.)
+Sibylline Oracles is plurality-prophetic under the recommended feature
+set; Bahman Yasht increasingly reads as a genuine "doesn't transfer" case.
+The overall transfer question remains open — see `docs/classifier.md` for
+the full accounting.
 
 ## Project scope (v1)
 

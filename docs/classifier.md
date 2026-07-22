@@ -92,6 +92,31 @@ prophetic) despite Revelation 18:4-8 being added as its deliberate
 biblical mirror — the pairing didn't transfer the way the
 Isaiah-5/1-Enoch-94 woe pairing appears to have.
 
+## 1 Enoch 1:9 excluded from all analysis (2026-07-22, project owner's direction)
+
+Per the project owner's direction, 1 Enoch 1:9 — the verse Jude 1:14-15
+quotes — is excluded from every evaluation pass. `src/chunk_transfer_corpora.py`
+strips the verse from the raw text before mechanical chunking (with an
+assertion that exactly one match was removed), and the `ch1_theophany`
+pericope in `src/transfer_pericopes.py` now ends at the verse-9 boundary,
+covering vv. 1-8 only. Jude 1:14-15 itself remains in the seed set — it is
+scripture, and its prophetic label stands on its own canonical authority,
+not on the 1 Enoch parallel.
+
+**Effect on results: none of the transfer findings depended on that
+verse.** The mechanical-chunking numbers moved by at most 0.001 (one chunk
+out of 1396). The `ch1_theophany` pericope, re-evaluated on vv. 1-8
+without the Jude-quoted verse, scores *higher* than before: 70% / 90% /
+80% / 90% prophetic across full/narrow/nostruct/normttr (previously
+64/82/73/82 with v. 9 included). This is methodologically cleaner, not
+just compliant: it removes the possibility that the pericope's strong
+score was partly an artifact of the model matching text near-identical to
+a seed-set verse (Jude 1:14-15). The surrounding theophany — God coming
+forth, mountains melting, judgment announced — carries the prophetic-
+register signal entirely on its own. References to "the Jude-quoted
+pericope" in earlier sections below describe evaluations run before this
+exclusion and are retained as history.
+
 ## Seed-set cross-validation result
 
 Logistic regression beat linear SVM (macro-F1 0.686 vs. 0.660, 5-fold CV) and
