@@ -5,6 +5,74 @@ alternatives were considered. Newest entries at the top.
 
 ---
 
+## 2026-07-22 — Clarified 1 Enoch's status: linguistic comparison text, not a source of truth (supersedes part of the 07-21 Jude entry's wording)
+
+**Decision:** Rewrote the overreaching phrases in `docs/study-notes/enoch.md` and added a
+"What the quotation does and doesn't establish" section; added a matching sentence to the
+README's scope disclaimer. The corrected framing: the canonical "prophesied" label in Jude
+1:14-15 attaches to *Jude's own verses* (which are scripture and a genuine prophecy of
+God's judgment), not to the book of 1 Enoch — a centuries-later composite work outside the
+Protestant (and Catholic, and most Orthodox) canons. Jude quoting it follows the Acts
+17:28 / Titus 1:12 pattern (inspired author citing an uninspired text for one true
+statement, without endorsing the book). This supersedes the 2026-07-21 Jude seed-set
+entry's phrasing that the pair's prophetic label is "the canon's" — the canon labels
+Jude's side of the pair only; the 1 Enoch side is unlabeled transfer data whose
+classification measures style, not status.
+
+**Why:** Raised directly by the project owner, who is Protestant and was explicit that
+Jude 14-15 being real prophecy does not mean non-canonical books should be leaned on as
+sources of truth. On review the concern was correct as a matter of precision, not just
+preference: two phrases in `enoch.md` ("the canon's own" ground-truth label, "documented
+ancient answer" that the register transfers) drifted past what the quotation establishes.
+The fix also sharpens the science — the transfer corpora are non-canonical *by design*
+(that's what makes them a transfer test), so the project's claims never depended on
+elevating 1 Enoch, and the docs now say so explicitly.
+
+**Alternatives considered:** Removing Jude 1:14-15 or the 1 Enoch corpus from the project
+(not on the table and not requested — the transfer-test design requires non-biblical
+comparison texts, and measuring a text's style implies nothing about its truth; the
+problem was framing, not data). Rewriting the 2026-07-21 decision entry in place
+(rejected — this file is a historical log; superseding wording gets a new entry, not a
+silent edit).
+
+---
+
+## 2026-07-22 — Tested the length confound directly (nostruct), found the real driver is verse-form; fixed the fixable half with Guiraud's R (normttr)
+
+**Decision:** Added two feature sets to `src/train_classifier.py`. `--features nostruct`
+(18 columns: narrow minus `avg_sent_len`/`std_sent_len`/`avg_word_len`/`n_words`) tests
+whether sentence-length statistics specifically were behind the narrow model's
+Sibylline-Oracles-as-law-wisdom result. They weren't — the mislabeling persisted almost
+unchanged (53.1% vs. 52.7%), and tracing it further found the real driver: Sibylline
+Oracles's raw ttr (0.914) sits above the entire seed set's range and its POS profile leans
+law-wisdom — an artifact of verse-form translation (short end-stopped lines, high
+per-chunk lexical variety), present in both verse-translated corpora (Sibylline Oracles,
+Bahman Yasht) and absent from prose-translated 1 Enoch. `--features normttr` then applied
+the standard fix for the sample-size half of that artifact: `ttr_guiraud` (Guiraud's R,
+unique/sqrt(n)) added to `src/extract_features.py`, swapped in for raw ttr. Result:
+partial fix — CV accuracy improved over nostruct (0.66 vs. 0.63), Sibylline Oracles's
+law-wisdom share dropped to 42.9% (no longer a majority), but the freed mass went to
+narrative, not prophetic. normttr documented as the recommended feature set going forward.
+
+**Why:** Chosen over the alternative next step already written down in `status.md`
+(growing the seed set first) because if the structural-feature confound was real, more
+data would just produce a bigger confounded dataset — cheaper to test the mechanism
+directly first. The test falsified the original hypothesis (sentence length) and replaced
+it with a better-supported one (verse-form), which is exactly the payoff hoped for. Key
+side-finding: the Jude 1:14-15 / 1 Enoch anchor pericope scored 64-82% prophetic across
+all four feature sets — the one result in the project robust to feature-set choice.
+
+**Alternatives considered:** Growing the seed set first per the written plan (deferred,
+not rejected — still the top next step, now better informed: prioritize prose-translated
+comparison material to test whether the prose/verse split holds beyond one corpus each).
+Further feature-dropping to chase the remaining Sibylline Oracles ambiguity (rejected —
+dropping columns was tried twice on this confound without resolving it; the residual
+narrative/prophetic ambiguity under normttr is plausibly an honest read of a corpus that
+mixes narrative frame with oracular content, and more/better pericopes are better
+positioned to resolve it than more feature engineering).
+
+---
+
 ## 2026-07-21 — Hand-picked transfer pericopes; caught a second (length) confound before reporting the first pass
 
 **Decision:** `src/transfer_pericopes.py` hand-selects 12 coherent passages from the

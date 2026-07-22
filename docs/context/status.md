@@ -44,6 +44,15 @@ seed-set CV accuracy improved) but the freed probability mass moved to "narrativ
 
 ## Done
 
+- 1 Enoch framing clarification (2026-07-22): per the project owner's direction, corrected
+  `docs/study-notes/enoch.md` and the README to state explicitly that 1 Enoch is a
+  linguistic comparison text, not a source of truth — the canonical "prophesied" label in
+  Jude 1:14-15 belongs to Jude's own verses, not to the book of 1 Enoch (non-canonical in
+  the Protestant canon; Jude quoting it follows the Acts 17:28 / Titus 1:12
+  inspired-author-quotes-uninspired-text pattern). Transfer corpora are non-canonical *by
+  design* — that's what makes them a transfer test — and their classification measures
+  style, never truth or scriptural status. Supersedes the earlier "the canon's own label"
+  phrasing; see the 2026-07-22 entry in `decisions.md`.
 - Length-normalized ttr / normttr feature set (2026-07-22): added `ttr_guiraud` (Guiraud's R,
   unique words / sqrt(n)) to `src/extract_features.py` and a fourth feature set,
   `--features normttr` (nostruct with raw `ttr` swapped for `ttr_guiraud`), to
