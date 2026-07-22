@@ -3,7 +3,7 @@
 Snapshot of where the project stands. Update this as work progresses — it should always
 reflect the current state, not a history (see `decisions.md` for the log of past decisions).
 
-_Last updated: 2026-07-21_
+_Last updated: 2026-07-22_
 
 ## Summary
 
@@ -17,22 +17,66 @@ seven angel-of-the-LORD theophanies split narrative/prophetic within-scene, and 
 theophany split prophetic/law-wisdom within-scene) is built and explored in a notebook; and
 feature extraction (general stylometric + prophetic-specific) is done and run on the seed
 set; and a classifier (logistic regression, chosen over linear SVM by CV) has been
-evaluated three ways: full 129-column feature set, narrowed 24-column feature set, and
-hand-picked pericopes (both feature sets). Best evidence so far for transfer: the specific
-1 Enoch passage Jude 1:14-15 quotes scores 64-82% prophetic across both models. That result
-doesn't generalize cleanly to the rest of either transfer corpus or hold up under feature
-narrowing, so the overall transfer question is still open — see below.
+evaluated five ways: full 129-column feature set, narrowed 24-column feature set, a further
+"nostruct" 18-column feature set (narrow minus sentence/word-length columns), a "normttr"
+variant (nostruct with raw ttr swapped for length-normalized Guiraud's R), and hand-picked
+pericopes (all four feature sets). Best evidence so far for transfer: the specific 1 Enoch
+passage Jude 1:14-15 quotes scores 64-82% prophetic across *all four* feature sets — the one
+result in the project that's robust to feature-set choice. That result doesn't generalize
+cleanly to Sibylline Oracles or Bahman Yasht: the length-confound test (nostruct) showed the
+mislabeling wasn't about sentence length but translated-verse-form (elevated lexical
+diversity, lower verb density) shared by the two verse-translated corpora but absent from
+1 Enoch (prose-translated); the follow-up normttr test confirmed part of that was a fixable
+ttr sample-size artifact (Sibylline Oracles's law-wisdom share dropped from 53.1% to 42.9%,
+seed-set CV accuracy improved) but the freed probability mass moved to "narrative," not
+"prophetic" — see `docs/classifier.md`'s "Length-normalizing ttr" section.
 
 ## In progress
 
 - Nothing actively in flight. Next unstarted step, per `docs/classifier.md`'s updated
   conclusion: growing the seed set (345 rows is thin for 24+ features) and hand-picking
-  more transfer pericopes to shrink the small-N sampling noise in that evaluation (12
-  pericopes / 160 chunks currently), then revisiting feature selection with more data to
-  check it against.
+  more transfer pericopes — especially more prose-translated comparison material, to test
+  whether the prose/verse split found in the nostruct/normttr tests holds beyond one corpus
+  each. The verse-form confound now has one real fix applied (Guiraud's R, keep it — better
+  accuracy, more defensible coefficients) and one open gap remaining (Sibylline Oracles's
+  ambiguous narrative/prophetic split under normttr) that more data is better positioned to
+  resolve than further feature engineering.
 
 ## Done
 
+- Length-normalized ttr / normttr feature set (2026-07-22): added `ttr_guiraud` (Guiraud's R,
+  unique words / sqrt(n)) to `src/extract_features.py` and a fourth feature set,
+  `--features normttr` (nostruct with raw `ttr` swapped for `ttr_guiraud`), to
+  `src/train_classifier.py`. Raw ttr is a known sample-size artifact (shorter chunks show
+  higher ttr regardless of genre), and Sibylline Oracles's chunks average 18.1 words vs.
+  1 Enoch's 25.3 — a plausible confound on top of the verse-form one nostruct surfaced.
+  Result: partial fix. Guiraud's R pulls Sibylline Oracles's mean back inside the seed set's
+  range (3.66, vs. raw ttr's 0.914 sitting above the seed set's max of 0.857); seed-set CV
+  accuracy improved (0.66 vs. nostruct's 0.63); Sibylline Oracles's law-wisdom share under
+  mechanical chunking dropped from 53.1% to 42.9% (no longer a majority verdict). But the
+  freed-up mass went mostly to "narrative" (19.2% → 23.9% prophetic, barely moved) — so this
+  fixes the false law-wisdom-majority result without manufacturing a prophetic signal that
+  wasn't otherwise there. `normttr` is now the recommended feature set going forward (best
+  CV accuracy among the reduced sets, most defensible coefficients, no known unfixed
+  confound). Full writeup in `docs/classifier.md`.
+
+- Length-confound test / nostruct feature set (2026-07-22): added `--features nostruct` to
+  `src/train_classifier.py` (18 columns: narrow minus `avg_sent_len`/`std_sent_len`/
+  `avg_word_len`/`n_words`, isolating whether sentence-length statistics specifically were
+  behind the narrow model's Sibylline-Oracles-as-law-wisdom result) and extended
+  `src/eval_pericopes.py` to apply all three saved models. Result: the confound did **not**
+  go away (Sibylline Oracles still 53.1% law-wisdom under mechanical chunking, near-identical
+  to narrow's 52.7%) — ruling out sentence length as the specific mechanism. Traced the real
+  cause instead: Sibylline Oracles's `ttr` (0.914) sits above the entire seed set's range
+  (max 0.857, law-wisdom), and its POS profile (verb/subordinating-conjunction density) sits
+  closer to law-wisdom than prophetic — an artifact of Terry's 1890 English hexameter
+  translation (short lines, high per-chunk lexical variety), not legal content. Bahman Yasht
+  (also verse-translated) shows the same elevation (ttr 0.880) and the same even split;
+  1 Enoch (prose-translated, Charles 1913) doesn't (ttr 0.792) and is the corpus whose
+  transfer result has held up. New, better-supported reading: the confound is
+  translation-*form* (verse vs. prose), not length or vocabulary era, and it isn't fixable
+  by dropping more feature columns since `ttr`/POS carry the same signal `n_words` did.
+  Full writeup in `docs/classifier.md`.
 - Hand-picked transfer pericopes (2026-07-21): `src/transfer_pericopes.py` hand-selects 12
   coherent passages across the three transfer corpora (the seed-set editorial method,
   applied to the transfer corpora — e.g. 1 Enoch's opening theophany that Jude 1:14-15

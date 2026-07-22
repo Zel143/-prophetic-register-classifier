@@ -19,11 +19,23 @@ prophetic-specific features plus non-lexical general-stylometric features
 (sentence/word length, TTR, POS proportions) -- see docs/classifier.md for
 why: the full feature set's top coefficients turned out to be dominated by
 fw_her/fw_she, which track "is this passage about a woman" (Ruth, Hagar)
-rather than narrative register generally. Outputs are suffixed by mode
-(_narrow) so both runs' results stay on disk for comparison.
+rather than narrative register generally. --features nostruct goes one
+step further than narrow: it also drops the sentence/word-length columns
+(avg_sent_len, std_sent_len, avg_word_len, n_words) implicated in the
+narrow model's Sibylline-Oracles-as-law-wisdom result (translated-hexameter
+sentence rhythm coincidentally matching the seed set's law-wisdom passages
+structurally, not genre -- see docs/classifier.md). Outputs are suffixed
+by mode (_narrow, _nostruct) so all runs' results stay on disk for
+comparison.
+
+--features normttr is nostruct with raw ttr swapped for Guiraud's R
+(unique words / sqrt(n)), a length-normalized diversity measure -- tests
+whether the nostruct confound (verse-translated corpora reading
+lexically-diverse/law-wisdom-like) is a raw-ttr sample-size artifact
+fixable by normalization, rather than a deeper genre-form difference.
 
 Usage:
-    python src/train_classifier.py [--features all|narrow]
+    python src/train_classifier.py [--features all|narrow|nostruct|normttr]
 """
 import argparse
 import os
@@ -58,6 +70,29 @@ NARROW_FEATURE_COLS = [
     "future_modal_density", "imperative_density",
 ]
 
+# Narrow, minus the sentence/word-length columns -- isolates whether those
+# structural features (rather than genuinely content-based ones) are what's
+# driving the narrow model's transfer result. Keeps ttr (lexical diversity,
+# not sentence rhythm) and drops avg_sent_len/std_sent_len/avg_word_len/n_words.
+NOSTRUCT_FEATURE_COLS = [
+    "ttr",
+    "divine_speech_formula", "second_person_density", "vocative_density",
+    "future_modal_density", "imperative_density",
+]
+
+# Same as nostruct, but swaps raw ttr for Guiraud's R (unique / sqrt(n)) --
+# see docs/classifier.md: raw ttr shrinks as chunk length grows, which is
+# exactly the confound behind Sibylline Oracles/Bahman Yasht's elevated
+# ttr (they're verse-translated with shorter chunks than 1 Enoch's prose,
+# not more lexically diverse per se). Guiraud's R divides by sqrt(n)
+# instead of n, the standard length-normalization for comparing TTR across
+# texts of different lengths.
+NORMTTR_FEATURE_COLS = [
+    "ttr_guiraud",
+    "divine_speech_formula", "second_person_density", "vocative_density",
+    "future_modal_density", "imperative_density",
+]
+
 
 def load_seed_data(mode):
     df = pd.read_csv(SEED_FEATURES_PATH)
@@ -66,6 +101,16 @@ def load_seed_data(mode):
         feature_cols = [
             c for c in all_feature_cols
             if c in NARROW_FEATURE_COLS or c.startswith(NARROW_FEATURE_PREFIXES)
+        ]
+    elif mode == "nostruct":
+        feature_cols = [
+            c for c in all_feature_cols
+            if c in NOSTRUCT_FEATURE_COLS or c.startswith(NARROW_FEATURE_PREFIXES)
+        ]
+    elif mode == "normttr":
+        feature_cols = [
+            c for c in all_feature_cols
+            if c in NORMTTR_FEATURE_COLS or c.startswith(NARROW_FEATURE_PREFIXES)
         ]
     else:
         feature_cols = all_feature_cols
@@ -142,9 +187,9 @@ def apply_to_transfer(pipe, feature_cols, pred_path):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--features", choices=["all", "narrow"], default="all")
+    parser.add_argument("--features", choices=["all", "narrow", "nostruct", "normttr"], default="all")
     args = parser.parse_args()
-    suffix = "" if args.features == "all" else "_narrow"
+    suffix = "" if args.features == "all" else f"_{args.features}"
     model_path = os.path.join(RESULTS_DIR, f"classifier{suffix}.joblib")
     eval_path = os.path.join(RESULTS_DIR, f"classifier_eval{suffix}.txt")
     pred_path = os.path.join(RESULTS_DIR, f"transfer_predictions{suffix}.csv")

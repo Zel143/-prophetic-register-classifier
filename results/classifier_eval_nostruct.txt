@@ -1,0 +1,61 @@
+Feature set: nostruct (20 columns)
+Model: linear_svm
+
+logistic_regression: macro-F1 0.617 (+/- 0.055)
+linear_svm: macro-F1 0.630 (+/- 0.062)
+
+Cross-validated classification report:
+              precision    recall  f1-score   support
+
+   prophetic       0.60      0.44      0.51       127
+   narrative       0.63      0.75      0.68       130
+  law-wisdom       0.68      0.74      0.71        88
+
+    accuracy                           0.63       345
+   macro avg       0.63      0.64      0.63       345
+weighted avg       0.63      0.63      0.62       345
+
+Confusion matrix:
+                 pred_prophetic  pred_narrative  pred_law-wisdom
+true_prophetic               56              49               22
+true_narrative               24              97                9
+true_law-wisdom              14               9               65
+
+Feature importance (final model, fit on all seed data):
+
+Top features for 'law-wisdom':
+  pos_verb                       -0.472
+  pos_aux                        -0.438
+  pos_sconj                      -0.412
+  pos_adp                        -0.364
+  ttr                            +0.354
+  pos_cconj                      -0.334
+  pos_adv                        -0.234
+  future_modal_density           +0.215
+
+Top features for 'narrative':
+  future_modal_density           -0.345
+  divine_speech_formula          -0.255
+  pos_num                        +0.226
+  ttr                            -0.192
+  pos_adj                        -0.179
+  pos_cconj                      +0.152
+  imperative_density             -0.138
+  pos_propn                      +0.123
+
+Top features for 'prophetic':
+  pos_verb                       +0.355
+  divine_speech_formula          +0.342
+  pos_aux                        +0.332
+  pos_adp                        +0.331
+  pos_pron                       +0.310
+  pos_det                        +0.282
+  pos_noun                       +0.276
+  pos_sconj                      +0.238
+
+Transfer-corpus predicted-label proportions:
+predicted_label    law-wisdom  narrative  prophetic
+corpus                                             
+1_enoch                 0.221      0.535      0.244
+bahman_yasht            0.387      0.496      0.116
+sibylline_oracles       0.531      0.277      0.192

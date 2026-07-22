@@ -9,21 +9,32 @@ extraction used on the seed set). Run in order:
 
 ```
 python src/chunk_transfer_corpora.py
-python src/train_classifier.py --features all      # results/classifier*.joblib etc.
-python src/train_classifier.py --features narrow   # results/classifier_narrow* etc.
-python src/transfer_pericopes.py                    # hand-picked pericopes, see below
-python src/eval_pericopes.py                        # applies both saved models to them
+python src/train_classifier.py --features all        # results/classifier*.joblib etc.
+python src/train_classifier.py --features narrow     # results/classifier_narrow* etc.
+python src/train_classifier.py --features nostruct   # results/classifier_nostruct* etc.
+python src/train_classifier.py --features normttr    # results/classifier_normttr* etc.
+python src/transfer_pericopes.py                      # hand-picked pericopes, see below
+python src/eval_pericopes.py                          # applies all four saved models to them
 ```
 
 `--features narrow` drops the 92 `fw_*` function-word columns and keeps
 only the prophetic-specific features plus non-lexical general-stylometric
 ones (sentence/word length, TTR, POS proportions) — see "Narrowed feature
-set" below for why, and what it did and didn't fix.
+set" below for why, and what it did and didn't fix. `--features nostruct`
+goes further and also drops the sentence/word-length columns, isolating
+whether those specifically (vs. `ttr`/POS) were behind the narrow model's
+Sibylline Oracles result — see "Testing the length-confound hypothesis
+directly" below. `--features normttr` is nostruct with raw `ttr` swapped
+for Guiraud's R (`ttr_guiraud`, unique words / sqrt(n)), a length-
+normalized diversity measure — see "Length-normalizing ttr" below;
+**this is the recommended feature set for future work.**
 
-Outputs (each run writes its own suffixed files, so both are on disk for
-comparison): `results/classifier[_narrow].joblib` (fitted pipeline),
-`results/classifier_eval[_narrow].txt` (CV report + feature importance +
-transfer summary), `results/transfer_predictions[_narrow].csv` (per-chunk
+Outputs (each run writes its own suffixed files, so all four are on disk
+for comparison): `results/classifier[_narrow|_nostruct|_normttr].joblib`
+(fitted pipeline),
+`results/classifier_eval[_narrow|_nostruct|_normttr].txt` (CV report +
+feature importance + transfer summary),
+`results/transfer_predictions[_narrow|_nostruct|_normttr].csv` (per-chunk
 predictions and class probabilities for all three transfer corpora),
 `results/transfer_pericope_chunks_features.csv` and
 `results/transfer_pericopes_predictions.csv` (hand-picked pericopes,
@@ -117,6 +128,138 @@ other words: narrowing the feature set fixed one confound (topic-leaking
 vocabulary) and exposed a second one underneath it (sentence-length
 statistics acting as an accidental proxy for "translated verse" rather than
 for law-wisdom specifically).
+
+## Testing the length-confound hypothesis directly (nostruct feature set)
+
+The narrowed feature set left an open question: was Sibylline Oracles
+getting mislabeled law-wisdom because of *sentence-length statistics*
+specifically (`n_words`, `avg_word_len`, `avg_sent_len`, `std_sent_len`
+coincidentally matching law-wisdom's structural profile), or something
+broader? Tested directly with a third feature set,
+`--features nostruct` (`src/train_classifier.py`, `NOSTRUCT_FEATURE_COLS`):
+drop all four sentence/word-length columns entirely, keep only the five
+prophetic-specific features, `ttr`, and the 14 `pos_*` proportions (18
+columns total).
+
+**Result: the confound did not go away.** Sibylline Oracles still comes
+back majority law-wisdom under mechanical chunking (53.1% law-wisdom vs.
+52.7% under narrow — essentially unchanged), and the hand-picked pericopes
+show the same pattern (`book1_creation` 48% law-wisdom, `book3_oracle_
+against_idolatry` 58%). Removing the length columns entirely didn't fix
+it, which rules out "sentence-length statistics specifically" as the
+mechanism.
+
+**What's actually driving it: POS composition and lexical diversity, tied
+to the translation's verse form, not to legal content.** Checked directly
+(seed set vs. transfer corpora):
+
+| | pos_verb | pos_aux | pos_sconj | pos_adp | ttr |
+|---|---|---|---|---|---|
+| seed: law-wisdom | 0.115 | 0.050 | 0.011 | 0.109 | 0.857 |
+| seed: narrative | 0.133 | 0.048 | 0.025 | 0.125 | 0.771 |
+| seed: prophetic | 0.136 | 0.070 | 0.030 | 0.122 | 0.792 |
+| Sibylline Oracles | 0.105 | 0.071 | 0.016 | 0.114 | **0.914** |
+| 1 Enoch | 0.115 | 0.063 | 0.020 | 0.135 | 0.792 |
+| Bahman Yasht | 0.093 | 0.059 | 0.018 | 0.120 | 0.880 |
+
+Sibylline Oracles's type-token ratio (0.914) sits *above* the seed set's
+entire range (max 0.857, law-wisdom) — the nostruct model's strongest
+law-wisdom coefficient is `ttr` (+0.354) — and its verb/subordinating-
+conjunction density sits closer to law-wisdom's profile than to
+prophetic's. This isn't a legal-content signal; it's an artifact of Terry's
+1890 English hexameter translation: short, end-stopped verse lines with
+comparatively little word repetition read, structurally, like Leviticus's
+formulaic-but-lexically-varied casuistic prose rather than like Isaiah's
+repetitive oracular parallelism. Bahman Yasht's ttr (0.880) is elevated the
+same direction for the same reason (also verse-translated), which tracks
+with why it split roughly evenly across models rather than reading
+cleanly prophetic. 1 Enoch (prose translation, Charles 1913) doesn't show
+this elevation (ttr 0.792, squarely in the prophetic/narrative range) —
+consistent with it being the corpus that transfers most legibly across
+all three feature sets.
+
+**What did hold up, robustly, across all three feature sets (full /
+narrow / nostruct):** the Jude 1:14-15 / 1 Enoch 1:9 anchor pericope
+scored 64% / 82% / 64% prophetic, and the Bahman Yasht dream/oracle split
+(Zoroaster's dream-report vs. Ahura Mazda's first-person answer) moved in
+the expected direction under all three (dream half trending narrative,
+oracle half holding near 50% prophetic). These are the two findings in the
+project that don't depend on which feature set is used to produce them.
+
+**Revised confound picture.** The original three candidate explanations
+(translator-era vocabulary, chunking-method mismatch, small training set)
+should be joined by a fourth, now the best-supported one: **verse-form
+translation style** (short end-stopped lines, comparatively high lexical
+diversity per chunk) structurally resembles this seed set's law-wisdom
+class independent of content, and it specifically afflicts the two
+transfer corpora translated as verse (Sibylline Oracles, Bahman Yasht),
+not the one translated as prose (1 Enoch). Feature narrowing was the right
+move for defensibility but the wrong lever for this particular confound —
+it isn't fixable by dropping columns, since `ttr` and POS proportions carry
+the same verse-form signal that `n_words`/`avg_word_len` did. Fixing it
+would require either a feature that's genuinely insensitive to verse vs.
+prose form, or restricting the transfer claim to prose-translated
+corpora and treating Sibylline Oracles/Bahman Yasht's classifications as
+form-confounded rather than genre evidence either way.
+
+## Length-normalizing ttr (normttr feature set)
+
+Tried the first option above directly: raw `ttr` (unique words / n) is a
+textbook-known artifact of sample size -- shorter chunks show higher ttr
+simply because there's less room for a word to repeat, independent of
+genre. Sibylline Oracles's chunks average 18.1 words (vs. 1 Enoch's 25.3),
+so some of its elevated ttr (0.914) could be this sampling effect rather
+than a genuine verse-form/lexical-diversity difference. Added
+`ttr_guiraud` to `src/extract_features.py` -- Guiraud's R, `unique /
+sqrt(n)`, the standard length-normalized alternative to raw TTR -- and a
+fourth feature set, `--features normttr` (nostruct with `ttr_guiraud`
+swapped in for `ttr`).
+
+**Guiraud's R pulls Sibylline Oracles back inside the seed set's range**
+(mean 3.66, vs. raw ttr's 0.914 sitting above the seed set's max of
+0.857), though it still leans toward law-wisdom's side (3.46) rather than
+narrative/prophetic's (4.03-4.18):
+
+| | ttr (raw) | ttr_guiraud |
+|---|---|---|
+| seed: law-wisdom | 0.857 | 3.460 |
+| seed: narrative | 0.771 | 4.176 |
+| seed: prophetic | 0.792 | 4.031 |
+| Sibylline Oracles | 0.914 | 3.659 |
+| 1 Enoch | 0.792 | 3.747 |
+| Bahman Yasht | 0.880 | 3.721 |
+
+**Result: a real but partial fix.** Seed-set CV macro-F1 improved over
+nostruct (0.66 vs. 0.63 accuracy) -- length-normalizing ttr helps the model
+generally, not just on transfer. Sibylline Oracles's law-wisdom share
+under mechanical chunking dropped from 53.1% (nostruct) to 42.9%
+(normttr) -- no longer a majority verdict, and back in the same range as
+the full model's 40.1%. But the freed-up mass moved mostly to
+"narrative," not "prophetic" (prophetic share ticked up only slightly,
+19.2% → 23.9%) -- so this fixes the specific false-law-wisdom-majority
+result without producing a strong positive prophetic signal for that
+corpus. Same pattern in the hand-picked pericopes: `book1_creation`'s
+law-wisdom share dropped 48% → 29% under normttr, but the freed mass went
+to narrative (52% → 71%), not prophetic (stayed at 0%). The two pericopes
+that already scored well under nostruct (`ch1_theophany` 64%,
+`book1_prophecy_of_christ` 41%) were unaffected either way -- their
+predictions were already stable across every feature set tried, ttr
+included or not.
+
+**Bottom line:** Guiraud's R confirms the diagnosis (verse-form's
+elevated raw ttr was partly, not wholly, a sample-size artifact) and is a
+straightforward improvement to keep -- better CV accuracy, fewer corpora
+mislabeled by a structural fluke. But it doesn't manufacture a transfer
+signal that wasn't already there; Sibylline Oracles moves from "wrongly
+confident it's law-wisdom" to "genuinely ambiguous between narrative and
+prophetic," which is arguably the more honest read of a corpus that mixes
+narrative frame and oracular content throughout. The Jude/1-Enoch anchor
+result and the Bahman Yasht dream/oracle split remain the project's two
+stable, feature-set-independent findings; normttr is now the
+recommended default over nostruct/narrow for future work (best CV
+accuracy of the reduced feature sets, most defensible coefficients, and
+no known unfixed confound), while `all` remains useful as a ceiling
+reference despite its fw_her/fw_she caveat.
 
 ## Hand-picked pericopes
 
@@ -247,9 +390,38 @@ pericope-level result narrows *where* the disagreement lives: not "is there
 any prophetic-register signal at all" (there clearly is, at least in
 places), but "is that signal strong and general enough to survive both
 different feature sets and different sampling methods." It currently isn't,
-consistently. Likely next steps, in rough order of expected payoff: growing
-the seed set (345 rows is genuinely thin for 24+ features, and the
+consistently.
+
+The nostruct-model test (see above) sharpened *why*: it isn't sentence-
+length statistics specifically, it's the translated-verse-form profile
+(elevated lexical diversity, lower verb/subordinator density) shared by
+the two corpora translated as verse (Sibylline Oracles, Bahman Yasht) but
+absent from the one translated as prose (1 Enoch) — which is also the one
+corpus whose transfer result (the Jude-quoted pericope at 64-82%, robust
+across all three feature sets) has held up throughout. That reframes the
+open question from "does prophetic register transfer" to "does it
+transfer legibly to this feature set across translation *forms*" — the
+evidence for prose-translated transfer is real and stable; verse-
+translated transfer is confounded by form in a way narrowing features
+can't fix, since the confound lives in `ttr`/POS, not just length.
+
+Length-normalizing `ttr` via Guiraud's R (see "Length-normalizing ttr"
+below) confirmed part of this was a fixable sample-size artifact — it
+brought Sibylline Oracles's law-wisdom share back down from 53.1% to
+42.9% and improved seed-set CV accuracy — but the freed-up probability
+mass mostly went to "narrative," not "prophetic," so it resolves the
+false law-wisdom majority without manufacturing a transfer signal that
+wasn't otherwise there. `normttr` is now the best-performing and most
+defensible reduced feature set and is the recommended default going
+forward.
+
+Likely next steps, in rough order of expected payoff: (1) growing the
+seed set (345 rows is genuinely thin for 24+ features, and the
 pericope-level evaluation's small N — 160 chunks across 12 pericopes — has
-real sampling noise of its own); hand-picking more transfer pericopes to
-shrink that noise; and only then revisiting feature selection again with
-more data to check it against.
+real sampling noise of its own); (2) hand-picking more transfer pericopes,
+especially more prose-translated comparison material, to test whether the
+prose/verse split holds beyond one corpus each. The `ttr`/POS-based
+verse-form confound has now had one real fix applied (Guiraud's R) and one
+remaining open gap (Sibylline Oracles's ambiguous narrative/prophetic
+split under normttr) that more/better transfer pericopes are better
+positioned to resolve than further feature engineering.

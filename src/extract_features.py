@@ -79,6 +79,13 @@ def general_features(text):
     feat["std_sent_len"] = np.std(slens) if slens else 0.0
     feat["avg_word_len"] = np.mean([len(w) for w in words]) if words else 0.0
     feat["ttr"] = len(set(words)) / n
+    # Guiraud's R (unique / sqrt(n)) -- raw ttr is well known to shrink as
+    # chunk length grows (more words, more repeats), which is exactly the
+    # confound behind Sibylline Oracles/Bahman Yasht's elevated ttr: they're
+    # verse-translated with shorter chunks than 1 Enoch's prose, not more
+    # lexically diverse. Guiraud's R divides by sqrt(n) instead of n, the
+    # standard correction for comparing TTR across different sample sizes.
+    feat["ttr_guiraud"] = len(set(words)) / (n ** 0.5)
     feat["n_words"] = n
     return feat
 
