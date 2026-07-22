@@ -21,7 +21,13 @@ Hebrew/English. If it doesn't, that's informative too.
 
 This is a computational-linguistics / stylometry project. It does not
 attempt to evaluate, prove, or adjudicate any prophecy's fulfillment or any
-tradition's theological claims — it measures textual style.
+tradition's theological claims — it measures textual style. In particular,
+the transfer corpora (1 Enoch, Sibylline Oracles, Bahman Yasht) are used
+as *linguistic comparison texts only*: they are non-canonical by design —
+that's what makes them a transfer test — and their inclusion implies no
+claim about their truth, inspiration, or scriptural status. (See
+`docs/study-notes/enoch.md` on why Jude quoting 1 Enoch 1:9 doesn't
+canonize 1 Enoch.)
 
 ## Status
 

@@ -54,26 +54,53 @@ reconstructed from). Jude's word for it is *prophesied* (Greek
 "prophecy" gets attached to Enoch, and it's attached to a text that isn't
 in the canon.
 
+### What the quotation does and doesn't establish
+
+Worth being precise here, because it's easy to overread. Jude quoting
+1 Enoch does **not** canonize 1 Enoch or make the book a source of truth.
+The book of 1 Enoch is a composite work written centuries after the
+patriarch it's named for (its oldest strata date to roughly the 3rd
+century BC), and it is not scripture in the Protestant canon — nor in the
+Catholic or most Orthodox canons; only the Ethiopian Orthodox tradition
+includes it. The standard Protestant reading of Jude 14-15 follows the
+same pattern as Paul quoting the pagan poets Aratus ("we are his
+offspring," Acts 17:28) and Epimenides (Titus 1:12): an inspired author
+may cite an uninspired text because the particular statement quoted is
+true and serves his argument, without endorsing the surrounding book.
+What carries scriptural authority is Jude's own two verses — a genuine
+prophecy of God's coming judgment — not the rest of 1 Enoch.
+
+For this project, that distinction is not a problem to work around; it's
+the design. 1 Enoch is in `data/transfer/` precisely *because* it is
+outside the canon — the transfer question ("does the linguistic style of
+biblical prophecy appear in non-biblical texts?") requires non-biblical
+comparison texts. Running stylometry on a text measures its style, not
+its truth, and implies no elevation of its status.
+
 ### Why this matters for the classifier specifically
 
 This is a rare case where the question the project is asking —
 *"is prophetic register a real, transferable linguistic signal, or is it
-just genre-labeling by convention?"* — has a documented ancient answer on
-record. Whoever wrote Jude read 1 Enoch's judgment-oracle material and
-recognized it as belonging to the same category as canonical prophecy,
-enough to cite it that way to a Christian audience. That's a 1st-century
-literary judgment that the register transfers — independent of, and
-centuries prior to, whatever this project's classifier finds. If the
-trained classifier also scores 1 Enoch 1:9-ish material as prophetic-register,
-that's modern stylometry agreeing with an ancient reader's genre judgment
-made on different grounds entirely. If it doesn't, that's worth sitting
-with rather than dismissing as noise.
+just genre-labeling by convention?"* — has a documented ancient data
+point on record. Whoever wrote Jude read 1 Enoch's judgment-oracle
+material and treated the quoted line as belonging to the same category as
+prophetic speech, enough to introduce it with *proephēteusen* to a
+Christian audience. Read strictly, that's a 1st-century *genre* judgment
+about one passage — a literary observation, not a canonization of the
+book (see "What the quotation does and doesn't establish" above) — and it
+sits independent of, and centuries prior to, whatever this project's
+classifier finds. If the trained classifier also scores 1 Enoch 1:9-ish
+material as prophetic-register, that's modern stylometry agreeing with an
+ancient reader's genre recognition made on different grounds entirely. If
+it doesn't, that's worth sitting with rather than dismissing as noise.
 
-Practically: `Jude 1:14-15` is now in `data/seed_set.csv` (prophetic
-class) precisely because it's a same-register anchor point sitting right
-next to the 1 Enoch transfer corpus — a controlled pair where the "ground
-truth" prophetic label isn't just this project's editorial call, it's the
-canon's own.
+Practically: `Jude 1:14-15` is in `data/seed_set.csv` (prophetic class)
+because it's a same-register anchor point sitting right next to the
+1 Enoch transfer corpus — a controlled pair. The canonical "prophecy"
+label belongs to *Jude's verses* (which are scripture); the corresponding
+1 Enoch passage carries no label at all in this project — it's transfer
+data the classifier scores, and its classification is a measurement of
+style, not a statement of the book's status or truth.
 
 ## For your own study: what Enoch's four verses are doing theologically
 
