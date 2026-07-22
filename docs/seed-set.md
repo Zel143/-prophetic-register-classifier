@@ -1,6 +1,6 @@
 # Seed set: reference list and rationale
 
-`data/seed_set.csv` (345 verses: 127 prophetic, 130 narrative, 88 law-wisdom)
+`data/seed_set.csv` (510 verses: 184 prophetic, 180 narrative, 146 law-wisdom)
 is built by `src/build_seed_set.py` from the reference list hardcoded in
 that script. This doc explains the selection criteria and flags the
 judgment calls, so the list can be revised without re-deriving the reasoning
@@ -85,15 +85,52 @@ single highest second-person density of any passage in the seed set).
 Also added: Micah 1:3-4, a later prophetic passage that reuses Sinai's
 storm-theophany imagery as judgment poetry.
 
+## 2026-07-22 growth pass (345 → 510 verses)
+
+Grew all three classes at once, per `docs/classifier.md`'s conclusion that
+345 rows was thin for 24+ features. Selection targeted this doc's own
+known-gaps list plus a few deliberate methodological anchors:
+
+- **Prophetic (+57):** more oracle *variety*, not just more volume — woe
+  oracles (Isaiah 5:8-15, same woe-series form as 1 Enoch 94-96's "Woes for
+  the Sinners" transfer pericope; Amos 5:18-24), a comfort oracle (Isaiah
+  40:1-8), first-person divine retrospective (Hosea 11:1-4), the new
+  covenant oracle (Jeremiah 31:31-34), the shepherd oracle (Ezekiel
+  34:11-16), third-person theophany poetry (Nahum 1:2-8, rounding out the
+  shape Micah 1:3-4 represents), day-of-the-LORD material (Obadiah
+  1:15-18, Haggai 2:6-9), and NT apocalyptic (Revelation 18:4-8, chosen
+  deliberately to mirror the Sibylline Oracles "Woe on Babylon" transfer
+  pericope). Revelation 18 also personifies Babylon as a woman —
+  her/she-dense *prophetic* text that directly counterweights the
+  fw_her/fw_she-implies-narrative artifact found in the first classifier
+  pass (and indeed, after this growth pass those columns dropped out of
+  the full model's top coefficients entirely).
+- **Narrative (+50):** patriarchal (Genesis 29:1-10, 41:37-43), exodus-era
+  (Exodus 2:1-10), action (1 Samuel 17:48-51 — David felling Goliath,
+  ranges chosen to exclude the taunt-speeches at 45-47), first-person
+  memoir (Nehemiah 2:11-16, a narrator style the set didn't have), and NT
+  narrative (Luke 2:1-7, Acts 27:39-44) so the NT isn't represented only
+  by prophetic-class Jude/Revelation. All exclude embedded divine speech.
+- **Law-wisdom (+58):** fills the Deuteronomy/Numbers gap (Deuteronomy
+  6:4-9 — the Shema, a deliberate boundary case like the Decalogue:
+  preached law with vocative and dense second person; Deuteronomy
+  24:10-15; Leviticus 25:1-7; Numbers 15:37-41, whose closing "I am the
+  LORD your God" refrain follows the Leviticus 19 precedent of keeping
+  refrain-bearing law verses in law-wisdom), plus more wisdom volume
+  (Proverbs 10:1-12, 15:1-7; Ecclesiastes 3:1-8, 12:1-7).
+
+Class balance improved from 127/130/88 to 184/180/146.
+
 ## Known gaps / things to revisit
 
-- No verses yet from Chronicles' genealogies, Numbers, or Deuteronomy law
-  material — could round out law-wisdom if the class needs more volume.
 - Ezekiel 37 and Jeremiah 1 both have a first-person narrative frame around
   the oracle core ("the word of the LORD came unto me, saying..."). Left
   labeled prophetic since the oracle content dominates the verse range
   chosen, but worth watching in feature analysis — this is exactly the kind
   of "prophetic register embedded in narrative frame" case the README flags
   as needing verse-level granularity.
-- Class sizes aren't balanced (127 / 130 / 88) — fine for a seed set, but
-  worth stratifying or weighting once the classifier is trained.
+- Still no Chronicles genealogies (as a distinct low-end narrative style) or
+  Job material (wisdom dialogue has a different shape than Proverbs'
+  sayings) — candidates for a future pass.
+- Class sizes are closer but still not equal (184 / 180 / 146) — fine for a
+  seed set; worth stratifying or weighting if it starts to matter.

@@ -1,61 +1,61 @@
-Feature set: all (129 columns)
-Model: logistic_regression
+Feature set: all (130 columns)
+Model: linear_svm
 
-logistic_regression: macro-F1 0.686 (+/- 0.051)
-linear_svm: macro-F1 0.660 (+/- 0.056)
+logistic_regression: macro-F1 0.687 (+/- 0.037)
+linear_svm: macro-F1 0.692 (+/- 0.040)
 
 Cross-validated classification report:
               precision    recall  f1-score   support
 
-   prophetic       0.61      0.60      0.61       127
-   narrative       0.69      0.75      0.72       130
-  law-wisdom       0.78      0.70      0.74        88
+   prophetic       0.65      0.60      0.62       184
+   narrative       0.71      0.74      0.72       180
+  law-wisdom       0.72      0.74      0.73       146
 
-    accuracy                           0.68       345
-   macro avg       0.70      0.69      0.69       345
-weighted avg       0.69      0.68      0.68       345
+    accuracy                           0.69       510
+   macro avg       0.69      0.69      0.69       510
+weighted avg       0.69      0.69      0.69       510
 
 Confusion matrix:
                  pred_prophetic  pred_narrative  pred_law-wisdom
-true_prophetic               76              38               13
-true_narrative               28              98                4
-true_law-wisdom              20               6               62
+true_prophetic              110              42               32
+true_narrative               36             134               10
+true_law-wisdom              24              14              108
 
 Feature importance (final model, fit on all seed data):
 
 Top features for 'law-wisdom':
-  pos_adj                        +1.170
-  n_words                        -0.911
-  avg_word_len                   +0.828
-  fw_neither                     +0.766
-  avg_sent_len                   -0.683
-  pos_sconj                      -0.679
-  fw_i                           -0.668
-  imperative_density             +0.652
+  second_person_density          +2.283
+  fw_i                           -1.584
+  fw_hath                        -1.291
+  ttr_guiraud                    -1.285
+  ttr                            +1.260
+  pos_aux                        -1.069
+  pos_pron                       +0.948
+  fw_a                           +0.942
 
 Top features for 'narrative':
-  n_words                        +1.619
-  fw_neither                     -0.997
-  avg_word_len                   -0.966
-  fw_shall                       -0.918
-  fw_if                          +0.822
-  imperative_density             -0.798
-  pos_adj                        -0.767
-  fw_as                          -0.751
+  ttr_guiraud                    +1.750
+  pos_aux                        +1.408
+  fw_not                         -1.382
+  fw_shall                       -1.301
+  fw_had                         +1.228
+  fw_as                          -1.159
+  future_modal_density           -1.030
+  imperative_density             -0.974
 
 Top features for 'prophetic':
-  fw_her                         -0.938
-  fw_she                         -0.924
-  fw_so                          -0.767
-  n_words                        -0.708
-  fw_art                         +0.692
-  divine_speech_formula          +0.663
-  fw_i                           +0.656
-  fw_if                          -0.608
+  second_person_density          -1.425
+  divine_speech_formula          +0.685
+  pos_det                        +0.680
+  fw_ye                          +0.500
+  pos_noun                       +0.495
+  fw_thou                        +0.485
+  fw_thy                         +0.474
+  ttr                            -0.468
 
 Transfer-corpus predicted-label proportions:
 predicted_label    law-wisdom  narrative  prophetic
 corpus                                             
-1_enoch                 0.187      0.423      0.390
-bahman_yasht            0.264      0.464      0.272
-sibylline_oracles       0.401      0.241      0.358
+1_enoch                 0.235      0.406      0.359
+bahman_yasht            0.330      0.446      0.224
+sibylline_oracles       0.447      0.240      0.313

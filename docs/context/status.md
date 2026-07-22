@@ -12,37 +12,49 @@ reflect a detectable linguistic style (verb mood, address form, formulaic marker
 than just content, and does that style transfer to non-biblical prophetic/oracular
 literature (Sibylline Oracles, 1 Enoch, Zoroastrian eschatology)? Repo scope, label scheme,
 and data-sourcing plan are written up; source data for both the biblical corpus and all
-three v1 transfer corpora is fetched; the hand-labeled seed set (345 verses, including
-seven angel-of-the-LORD theophanies split narrative/prophetic within-scene, and the Sinai
-theophany split prophetic/law-wisdom within-scene) is built and explored in a notebook; and
-feature extraction (general stylometric + prophetic-specific) is done and run on the seed
-set; and a classifier (logistic regression, chosen over linear SVM by CV) has been
-evaluated five ways: full 129-column feature set, narrowed 24-column feature set, a further
-"nostruct" 18-column feature set (narrow minus sentence/word-length columns), a "normttr"
-variant (nostruct with raw ttr swapped for length-normalized Guiraud's R), and hand-picked
-pericopes (all four feature sets). Best evidence so far for transfer: the specific 1 Enoch
-passage Jude 1:14-15 quotes scores 64-82% prophetic across *all four* feature sets — the one
-result in the project that's robust to feature-set choice. That result doesn't generalize
-cleanly to Sibylline Oracles or Bahman Yasht: the length-confound test (nostruct) showed the
-mislabeling wasn't about sentence length but translated-verse-form (elevated lexical
-diversity, lower verb density) shared by the two verse-translated corpora but absent from
-1 Enoch (prose-translated); the follow-up normttr test confirmed part of that was a fixable
-ttr sample-size artifact (Sibylline Oracles's law-wisdom share dropped from 53.1% to 42.9%,
-seed-set CV accuracy improved) but the freed probability mass moved to "narrative," not
-"prophetic" — see `docs/classifier.md`'s "Length-normalizing ttr" section.
+three v1 transfer corpora is fetched; the hand-labeled seed set (510 verses after the
+2026-07-22 growth pass: 184 prophetic / 180 narrative / 146 law-wisdom, including
+within-scene splits for seven angel-of-the-LORD theophanies and Sinai) is built; feature
+extraction (general stylometric + prophetic-specific, plus Guiraud's R) is run on it; and
+the classifier has been evaluated across four feature sets (full 129-column, narrow
+24-column, nostruct 18-column, normttr = nostruct with length-normalized Guiraud's R
+replacing raw ttr), each under both mechanical chunking and hand-picked transfer pericopes.
+Current headline results (510-row models): seed-set CV held steady with 48% more data
+(macro-F1 0.62-0.69 depending on feature set — the original accuracy wasn't small-N
+memorization); the fw_her/fw_she artifact is gone from the full model's top coefficients;
+the Jude 1:14-15-quoted 1 Enoch theophany pericope *strengthened* to 64-82% prophetic
+across all four feature sets; Sibylline Oracles under normttr is now plurality-prophetic
+(0.373) under mechanical chunking — a first; Bahman Yasht trends the other way (2-22%
+prophetic, worse each pass) and increasingly reads as a genuine "doesn't transfer" case.
+See `docs/classifier.md`'s "Grown seed set" section for the full current numbers.
 
 ## In progress
 
-- Nothing actively in flight. Next unstarted step, per `docs/classifier.md`'s updated
-  conclusion: growing the seed set (345 rows is thin for 24+ features) and hand-picking
-  more transfer pericopes — especially more prose-translated comparison material, to test
-  whether the prose/verse split found in the nostruct/normttr tests holds beyond one corpus
-  each. The verse-form confound now has one real fix applied (Guiraud's R, keep it — better
-  accuracy, more defensible coefficients) and one open gap remaining (Sibylline Oracles's
-  ambiguous narrative/prophetic split under normttr) that more data is better positioned to
-  resolve than further feature engineering.
+- Nothing actively in flight. Candidate next steps, per `docs/classifier.md`: hand-picking
+  more transfer pericopes (the pericope evaluation is still 160 chunks / 12 pericopes,
+  unchanged by the seed-set growth), especially prose-translated comparison material to
+  test whether the prose/verse-form split holds beyond one corpus each; and digging into
+  the two loose ends the growth pass surfaced — why the Revelation 18 / Sibylline
+  "Woe on Babylon" mirror pairing didn't help that pericope the way the Isaiah 5 /
+  1 Enoch 94 woe pairing appears to have, and whether Bahman Yasht's steady decline is
+  the honest "doesn't transfer" answer for Pahlavi summary-prose.
 
 ## Done
+
+- Seed-set growth pass (2026-07-22): grew `src/build_seed_set.py`'s reference list from 345
+  to 510 verses (184/180/146), targeting `docs/seed-set.md`'s own known-gaps list — new
+  prophetic *variety* (woe oracles incl. Isaiah 5:8-15 chosen to match 1 Enoch 94's
+  woe-series form, comfort oracle, first-person divine retrospective, third-person theophany
+  poetry, Revelation 18:4-8 chosen both to mirror the Sibylline "Woe on Babylon" pericope
+  and to break the fw_her/fw_she-implies-narrative correlation with her/she-dense prophetic
+  text), new narrative styles (first-person memoir, NT narrative), and the
+  Deuteronomy/Numbers/Ecclesiastes law-wisdom gap (incl. the Shema as a deliberate
+  boundary case). Retrained all four feature sets and re-ran both evaluations. CV held
+  (0.69/0.68/0.63/0.67 accuracy), fw_her/fw_she dropped out of the top coefficients, the
+  Jude-anchor pericope strengthened (64-82% across all four sets), Sibylline Oracles went
+  plurality-prophetic under normttr, Bahman Yasht declined further, and the Rev-18 mirror
+  didn't move "Woe on Babylon" (33%) — full numbers in `docs/classifier.md`'s "Grown seed
+  set" section, growth rationale in `docs/seed-set.md`.
 
 - 1 Enoch framing clarification (2026-07-22): per the project owner's direction, corrected
   `docs/study-notes/enoch.md` and the README to state explicitly that 1 Enoch is a

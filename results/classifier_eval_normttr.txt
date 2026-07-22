@@ -1,61 +1,61 @@
 Feature set: normttr (20 columns)
-Model: linear_svm
+Model: logistic_regression
 
-logistic_regression: macro-F1 0.646 (+/- 0.058)
-linear_svm: macro-F1 0.659 (+/- 0.057)
+logistic_regression: macro-F1 0.663 (+/- 0.050)
+linear_svm: macro-F1 0.641 (+/- 0.045)
 
 Cross-validated classification report:
               precision    recall  f1-score   support
 
-   prophetic       0.64      0.52      0.57       127
-   narrative       0.68      0.78      0.72       130
-  law-wisdom       0.67      0.70      0.69        88
+   prophetic       0.62      0.52      0.57       184
+   narrative       0.69      0.78      0.73       180
+  law-wisdom       0.68      0.71      0.69       146
 
-    accuracy                           0.66       345
-   macro avg       0.66      0.67      0.66       345
-weighted avg       0.66      0.66      0.66       345
+    accuracy                           0.67       510
+   macro avg       0.66      0.67      0.66       510
+weighted avg       0.66      0.67      0.66       510
 
 Confusion matrix:
                  pred_prophetic  pred_narrative  pred_law-wisdom
-true_prophetic               66              41               20
-true_narrative               18             101               11
-true_law-wisdom              19               7               62
+true_prophetic               96              50               38
+true_narrative               29             141               10
+true_law-wisdom              30              13              103
 
 Feature importance (final model, fit on all seed data):
 
 Top features for 'law-wisdom':
-  ttr_guiraud                    -0.383
-  pos_cconj                      -0.339
-  pos_sconj                      -0.266
-  pos_verb                       -0.251
-  pos_adp                        -0.240
-  pos_aux                        -0.240
-  pos_adj                        +0.185
-  future_modal_density           +0.184
+  ttr_guiraud                    -0.759
+  second_person_density          +0.402
+  future_modal_density           +0.395
+  pos_cconj                      -0.380
+  divine_speech_formula          -0.350
+  pos_noun                       +0.342
+  pos_adj                        +0.322
+  imperative_density             +0.277
 
 Top features for 'narrative':
-  ttr_guiraud                    +0.379
-  future_modal_density           -0.369
-  divine_speech_formula          -0.352
-  pos_adj                        -0.278
-  pos_noun                       -0.190
-  pos_cconj                      +0.182
-  pos_num                        +0.181
-  imperative_density             -0.130
+  future_modal_density           -0.805
+  ttr_guiraud                    +0.741
+  divine_speech_formula          -0.484
+  pos_adj                        -0.451
+  pos_noun                       -0.395
+  pos_cconj                      +0.370
+  pos_num                        +0.361
+  imperative_density             -0.344
 
 Top features for 'prophetic':
-  pos_adp                        +0.345
-  pos_aux                        +0.343
-  divine_speech_formula          +0.333
-  pos_verb                       +0.330
-  pos_pron                       +0.315
-  pos_det                        +0.306
-  pos_noun                       +0.258
-  pos_cconj                      +0.257
+  divine_speech_formula          +0.833
+  future_modal_density           +0.409
+  pos_verb                       +0.208
+  pos_intj                       +0.208
+  pos_num                        -0.167
+  second_person_density          -0.156
+  pos_adp                        +0.151
+  pos_adj                        +0.129
 
 Transfer-corpus predicted-label proportions:
 predicted_label    law-wisdom  narrative  prophetic
 corpus                                             
-1_enoch                 0.224      0.499      0.277
-bahman_yasht            0.358      0.515      0.128
-sibylline_oracles       0.429      0.332      0.239
+1_enoch                 0.241      0.496      0.262
+bahman_yasht            0.327      0.523      0.150
+sibylline_oracles       0.313      0.315      0.373

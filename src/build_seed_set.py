@@ -60,6 +60,21 @@ REFERENCES = {
         # commandments proper. See docs/study-notes/sinai.md.
         ("Exodus", 20, 1, 2, "Sinai: divine self-declaration opening the Decalogue, 'I am the LORD thy God'"),
         ("Micah", 1, 3, 4, "Sinai-theophany imagery reused as judgment oracle: 'the LORD cometh forth... mountains molten'"),
+        # 2026-07-22 growth pass: more oracle variety -- woe oracles, comfort
+        # oracle, first-person divine retrospective, third-person theophany
+        # poetry (rounding out the shape Micah 1:3-4 represents), and NT
+        # apocalyptic (Revelation 18 deliberately mirrors the Sibylline
+        # Oracles "Woe on Babylon" transfer pericope).
+        ("Isaiah", 5, 8, 15, "woe oracle against land-grabbers and revelers -- same woe-series form as 1 Enoch 94-96"),
+        ("Isaiah", 40, 1, 8, "comfort oracle: 'Comfort ye, comfort ye my people'"),
+        ("Jeremiah", 31, 31, 34, "new covenant oracle, 'saith the LORD' repeated"),
+        ("Ezekiel", 34, 11, 16, "shepherd oracle, first-person divine 'I will' chain"),
+        ("Hosea", 11, 1, 4, "first-person divine retrospective: 'When Israel was a child...'"),
+        ("Amos", 5, 18, 24, "woe on the day-of-the-LORD seekers; 'let judgment run down as waters'"),
+        ("Nahum", 1, 2, 8, "third-person theophany judgment poem -- storm imagery, like Micah 1:3-4"),
+        ("Obadiah", 1, 15, 18, "day-of-the-LORD oracle against Edom"),
+        ("Haggai", 2, 6, 9, "'I will shake all nations' oracle"),
+        ("Revelation", 18, 4, 8, "voice from heaven: Babylon judgment oracle -- NT apocalyptic, mirrors Sibylline 'Woe on Babylon'"),
     ],
     "narrative": [
         ("Genesis", 5, 21, 24, "Enoch: 'walked with God ... and he was not'"),
@@ -80,6 +95,17 @@ REFERENCES = {
         ("1 Kings", 3, 16, 28, "Solomon's judgment"),
         ("2 Kings", 5, 1, 14, "Naaman healed"),
         ("2 Chronicles", 34, 1, 13, "Josiah's reforms (narrated account)"),
+        # 2026-07-22 growth pass: more narrative variety -- patriarchal,
+        # exodus-era, court, first-person memoir (Nehemiah), and NT narrative
+        # (so the NT isn't represented only by prophetic-class Jude/Revelation).
+        # All chosen to exclude embedded divine speech, per the README rule.
+        ("Genesis", 29, 1, 10, "Jacob meets Rachel at the well (human dialogue only)"),
+        ("Genesis", 41, 37, 43, "Joseph elevated by Pharaoh (court narrative)"),
+        ("Exodus", 2, 1, 10, "Moses' birth and adoption (no divine speech in scene)"),
+        ("1 Samuel", 17, 48, 51, "David fells Goliath (pure action, taunt-speeches excluded)"),
+        ("Nehemiah", 2, 11, 16, "Nehemiah's night inspection of the walls (first-person memoir)"),
+        ("Luke", 2, 1, 7, "the nativity: census journey and birth (NT narrative)"),
+        ("Acts", 27, 39, 44, "shipwreck landing on Malta (NT narrative, no speech)"),
     ],
     "law-wisdom": [
         ("Exodus", 20, 3, 17, "the Ten Commandments proper, split from the Sinai divine-speech opening above"),
@@ -90,6 +116,19 @@ REFERENCES = {
         ("Proverbs", 3, 1, 12, "wisdom instruction"),
         ("Proverbs", 6, 6, 11, "sluggard wisdom saying"),
         ("Proverbs", 31, 10, 31, "virtuous woman"),
+        # 2026-07-22 growth pass: fills the gaps docs/seed-set.md itself
+        # flags -- Deuteronomy/Numbers law, more wisdom volume (Ecclesiastes),
+        # and shrinks the class imbalance (law-wisdom was 88 vs. 127/130).
+        # Deut 6:4-9 is a deliberate boundary case like the Decalogue:
+        # preached law with vocative + dense second person.
+        ("Deuteronomy", 6, 4, 9, "the Shema: 'Hear, O Israel' -- preached law, vocative + second-person dense"),
+        ("Deuteronomy", 24, 10, 15, "humanitarian case law: pledges, wages"),
+        ("Leviticus", 25, 1, 7, "sabbath-year law"),
+        ("Numbers", 15, 37, 41, "law of fringes"),
+        ("Proverbs", 10, 1, 12, "antithetic couplets"),
+        ("Proverbs", 15, 1, 7, "wisdom sayings: the soft answer"),
+        ("Ecclesiastes", 3, 1, 8, "'to every thing there is a season' -- wisdom poem"),
+        ("Ecclesiastes", 12, 1, 7, "'remember now thy Creator' -- wisdom instruction"),
     ],
 }
 

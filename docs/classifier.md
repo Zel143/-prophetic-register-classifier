@@ -40,6 +40,58 @@ predictions and class probabilities for all three transfer corpora),
 `results/transfer_pericopes_predictions.csv` (hand-picked pericopes,
 sentence-chunked within each — see "Hand-picked pericopes" below for why).
 
+## Grown seed set (2026-07-22): 345 → 510 verses, all four feature sets re-run
+
+The seed set grew from 345 to 510 verses (184 prophetic / 180 narrative /
+146 law-wisdom — see `docs/seed-set.md`'s growth-pass section for what was
+added and why). All four feature sets were retrained and re-evaluated;
+**the sections below this one report the original 345-row numbers** and are
+kept for the reasoning they document — the current numbers are these.
+
+**Seed-set CV held steady with 48% more data** — evidence the original
+accuracy wasn't small-N memorization: full 0.692 macro-F1 (now selecting
+linear SVM over logistic regression, previously 0.686), narrow 0.676
+(0.691), normttr 0.663 (0.66), nostruct 0.621 (0.63). The
+`fw_her`/`fw_she` artifact is **gone from the full model's top
+coefficients** — replaced by defensible register features
+(`divine_speech_formula`, `fw_ye`/`fw_thou`/`fw_thy` positive for
+prophetic; `fw_shall`/`future_modal_density` negative for narrative).
+Revelation 18:4-8 (Babylon personified as a woman — her/she-dense
+*prophetic* text) was added partly to break exactly that correlation.
+
+**Transfer, mechanical chunking** (prophetic share per corpus,
+full / narrow / nostruct / normttr):
+
+| corpus | full | narrow | nostruct | normttr |
+|---|---|---|---|---|
+| 1 Enoch | 0.359 | 0.265 | 0.208 | 0.262 |
+| Bahman Yasht | 0.224 | 0.133 | 0.074 | 0.150 |
+| Sibylline Oracles | 0.313 | 0.322 | 0.282 | **0.373** |
+
+Sibylline Oracles under normttr is now **plurality-prophetic** (0.373 vs.
+0.315 narrative, 0.313 law-wisdom) — the first time any reduced feature
+set has ranked it prophetic-first, and a direct payoff of the growth pass
+combined with Guiraud's R. Bahman Yasht moved the other way (worse under
+every feature set) — with more diverse training data the models became
+more confident it *isn't* biblical-style prophetic register; given it's
+the shortest corpus, translated from Pahlavi summary-prose, that reading
+has been trending for three passes now.
+
+**Transfer, hand-picked pericopes** — the Jude-quoted 1 Enoch theophany
+(ch1) **strengthened**: 64% / 82% / 73% / 82% prophetic across
+full/narrow/nostruct/normttr (nostruct was 64%, normttr 64% before the
+growth pass). 1 Enoch's "Woes for the Sinners" (ch94) rose to 67% under
+the full model (from 56%) — plausibly helped by Isaiah 5:8-15, added this
+pass specifically because it shares the woe-series form. Sibylline
+Oracles' "Prophecy of Christ" pericope improved under the reduced sets
+(nostruct 41% → 59%, normttr 41% → 53%). The Bahman Yasht dream/oracle
+split still moves the expected direction (dream 100% narrative under
+three of four models; oracle half 50% prophetic under all four). One
+miss worth recording: Sibylline "Woe on Babylon" did *not* improve (33%
+prophetic) despite Revelation 18:4-8 being added as its deliberate
+biblical mirror — the pairing didn't transfer the way the
+Isaiah-5/1-Enoch-94 woe pairing appears to have.
+
 ## Seed-set cross-validation result
 
 Logistic regression beat linear SVM (macro-F1 0.686 vs. 0.660, 5-fold CV) and

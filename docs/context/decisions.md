@@ -5,6 +5,41 @@ alternatives were considered. Newest entries at the top.
 
 ---
 
+## 2026-07-22 — Grew the seed set 345 → 510 with targeted variety, not just volume
+
+**Decision:** Extended `src/build_seed_set.py`'s reference list by 165 verses
+(prophetic +57, narrative +50, law-wisdom +58; class balance now 184/180/146). Selection
+was targeted three ways rather than just adding more of the same: (1) fill the gaps
+`docs/seed-set.md` already named (Deuteronomy/Numbers law, wisdom volume via Ecclesiastes,
+narrator-style variety via Nehemiah's memoir and NT narrative); (2) add prophetic *shape*
+variety (woe series, comfort oracle, first-person divine retrospective, third-person
+theophany poetry) rather than more divine-speech-formula oracles; (3) plant two deliberate
+methodological anchors — Isaiah 5:8-15 matching 1 Enoch 94's woe-series form, and
+Revelation 18:4-8 both mirroring the Sibylline "Woe on Babylon" pericope and breaking the
+fw_her/fw_she→narrative correlation (Babylon personified as a woman = her/she-dense
+prophetic text). Retrained all four feature sets, re-ran both transfer evaluations,
+updated `docs/classifier.md` (new "Grown seed set" section; older sections marked as
+345-row numbers) and `docs/seed-set.md`.
+
+**Why:** Both remaining next steps in the plan pointed here — 345 rows was flagged as thin
+from the first classifier pass onward. Results validated the approach: CV held steady with
+48% more data (so the original numbers weren't memorization), fw_her/fw_she dropped out of
+the full model's top coefficients (the Revelation 18 counterweight plus more data did what
+feature-dropping alone couldn't), the Jude-anchor pericope strengthened to 64-82% across
+all four feature sets, and Sibylline Oracles went plurality-prophetic under normttr for
+the first time. Honest misses recorded alongside: the Rev-18/"Woe on Babylon" mirror
+didn't move that pericope (33%), and Bahman Yasht declined further — increasingly looking
+like a genuine doesn't-transfer case rather than a confound.
+
+**Alternatives considered:** Growing only law-wisdom to balance classes (rejected — the
+imbalance was mild, and the bigger risks were prophetic-shape monoculture and the known
+lexical artifacts, both better addressed by targeted variety). Adding the remaining
+angel-of-the-LORD episodes (deferred again — they repeat a pattern the set already
+demonstrates well). Balancing classes exactly via trimming (rejected — discarding curated
+data to hit a ratio is backwards; stratification/weighting is available if it matters).
+
+---
+
 ## 2026-07-22 — Clarified 1 Enoch's status: linguistic comparison text, not a source of truth (supersedes part of the 07-21 Jude entry's wording)
 
 **Decision:** Rewrote the overreaching phrases in `docs/study-notes/enoch.md` and added a
